@@ -1,0 +1,35 @@
+/* сбрасываем стандартную браузерную стилизацию */
+
+@import url(../vendor/normalize.css);
+
+/* импортируем шрифты */
+
+@import url(../vendor/fonts/inter.css);
+
+/* контейнер страницы */
+
+@import url(../blocks/page/page.css);
+
+/* шапка сайта */
+
+@import url(../blocks/header/header.css);
+
+/* основная часть  */
+
+@import url(../blocks/main/main.css);
+
+/* секция профиля */
+
+@import url(../blocks/profile/profile.css);
+
+/* секция контента */
+
+@import url(../blocks/content/content.css);
+
+/* подвал сайта */
+
+@import url(../blocks/footer/footer.css);
+
+/* форма редактирования профиля */
+
+@import url(../blocks/edit-form/edit-form.css);
