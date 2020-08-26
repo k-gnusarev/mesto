@@ -14,6 +14,10 @@
 
 @import url(../blocks/header/header.css);
 
+/* лого */
+
+@import url(../blocks/logo/logo.css);
+
 /* основная часть  */
 
 @import url(../blocks/main/main.css);

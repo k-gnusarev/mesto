@@ -1,0 +1,19 @@
+.logo {
+  background-image: url(../../images/logo.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  width: 142px;
+  height: 33.4px;
+}
+
+/* отступ для лого добавлен, чтобы он не касался левого края страницы */
+
+@media all and (max-width: 1023px) {
+  .logo {
+    margin-left: 27px;
+
+    width: 103.7px;
+    height: 24.4px;
+  }
+}
