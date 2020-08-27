@@ -6,7 +6,8 @@
   margin: auto;
   margin-top: 45px;
 
-  border-bottom: 1px solid #545454;;
+  border-bottom: 1px solid #545454;
+  box-sizing: border-box;
 }
 
 @media all and (max-width: 1023px) {

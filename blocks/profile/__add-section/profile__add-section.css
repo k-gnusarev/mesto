@@ -1,0 +1,13 @@
+.profile__add-section {
+  max-width: 150px;
+  width: 100%;
+  margin-left: auto;
+}
+
+@media all and (max-width: 1023px) {
+  .profile__add-section {
+    margin: auto;
+    margin-top: 36px;
+    max-width: none;
+  }
+}
