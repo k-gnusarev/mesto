@@ -4,7 +4,8 @@
   padding: 11px;
   border: 1px solid #fff;
   background-image: url(../../../images/edit-button.svg);  
-  background-color: #000;
+  background-color: #000;  
+  background-size: auto;
 }
 
 .button_type_edit:active {

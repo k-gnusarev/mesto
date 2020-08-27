@@ -4,5 +4,6 @@
   width: 20.75px;
   height: 18px;
   box-sizing: border-box;
-  border: none;
+  border: none;  
+  background-size: auto;
 }

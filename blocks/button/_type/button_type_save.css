@@ -1,0 +1,16 @@
+.button_type_save {
+  height: 50px;
+  background-color: #000;  
+  background-size: auto;
+
+  font-size: 18px;
+  line-height: 1.22;
+  text-align: center;
+  color: #fff;
+
+  border: none;
+}
+
+.button_type_save:hover {
+  background: rgba(0, 0, 0, 0.8);
+}

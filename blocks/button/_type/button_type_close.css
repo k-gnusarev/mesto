@@ -1,0 +1,21 @@
+.button_type_close {
+  background-image: url(../../../images/Close-Icon.svg);
+  background-color: transparent;
+  background-size: cover;
+  
+  height: 40.7px;
+  width: 40.7px;
+  border: none;
+
+  position: absolute;
+  right: -40px;
+  top: -40px;
+}
+
+@media all and (max-width: 512px) {
+  .button_type_close {
+    right: 10px;
+    top: 10px;
+    filter: invert(100%);
+  }
+}
