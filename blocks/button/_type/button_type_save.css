@@ -1,7 +1,5 @@
 .button_type_save {
   height: 50px;
-  background-color: #000;  
-  background-size: auto;
 
   font-size: 18px;
   line-height: 1.22;
@@ -9,6 +7,8 @@
   color: #fff;
 
   border: none;
+  background-color: #000;  
+  background-size: auto;
 }
 
 .button_type_save:hover {
