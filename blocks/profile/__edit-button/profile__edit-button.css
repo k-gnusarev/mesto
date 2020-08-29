@@ -1,4 +1,4 @@
-.button_type_edit {  
+.profile__edit-button {
   height: 24px;
   width: 24px;
   padding: 11px;
@@ -9,6 +9,13 @@
   background-size: auto;
 }
 
-.button_type_edit:active {
-  border-color: rgb(255, 255, 255);
+.profile__edit-button:hover {
+  opacity: .6;
+}
+
+@media all and (max-width: 1023px) {
+  .profile__edit-button {
+    height: 18px;
+    width: 18px;
+  }
 }

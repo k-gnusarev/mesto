@@ -1,9 +1,13 @@
 const popup = document.querySelector('.popup');
-const editButton = document.querySelector('.button_type_edit');
-const closeButton = popup.querySelector('.button_type_close');
-const submitButton = popup.querySelector('.button_type_save');
+const editButton = document.querySelector('.profile__edit-button');
+const closeButton = popup.querySelector('.popup__close-button');
+const editForm = document.querySelector('.popup__form');
 
-// переменные для хранения текущего имени и описания профиля
+// переменные для полей попапа
+let popupTitleField = popup.querySelector('input[name="title"]');
+let popupSubtitleField = popup.querySelector('input[name="subtitle"]');
+
+// переменные для текущих имени и описания профиля
 let currentProfileTitle = document.querySelector('.profile__title');
 let currentProfileSubtitle = document.querySelector('.profile__subtitle');
 
@@ -14,9 +18,6 @@ const togglePopup = function () {
 
 // вызвать окно редактирования профиля
 const editButtonPressed = function () {
-  let popupTitleField = popup.querySelector('.popup__text_type_title');
-  let popupSubtitleField = popup.querySelector('.popup__text_type_subtitle');
-
   togglePopup();
 
   // вынести имя и описание профиля по умолчанию в текстовые поля попапа
@@ -25,12 +26,11 @@ const editButtonPressed = function () {
 }
 
 // сохранить изменения профиля и закрыть попап
-const formSubmit = function () {
-  let popupTitleField = popup.querySelector('.popup__text_type_title');
-  let popupSubtitleField = popup.querySelector('.popup__text_type_subtitle');
+let formSubmit = function (event) {
+  event.preventDefault();
 
   currentProfileTitle.textContent = popupTitleField.value;
-  currentProfileSubtitle.textContent = popupSubtitleField.value;  
+  currentProfileSubtitle.textContent = popupSubtitleField.value;
   
   togglePopup();
 }
@@ -43,16 +43,7 @@ const popupCloseByClickOnOverlay = (event) => {
   togglePopup();
 }
 
-// отправка формы по нажатию Enter
-const formSubmitByEnter = function (event) {
-  if (event.keyCode !== 13) {
-    return;
-  }
-  formSubmit();
-}
-
-document.addEventListener('keydown', formSubmitByEnter);
 editButton.addEventListener('click', editButtonPressed);
 closeButton.addEventListener('click', togglePopup);
-submitButton.addEventListener('click', formSubmit);
+editForm.addEventListener('submit', formSubmit);
 popup.addEventListener('click', popupCloseByClickOnOverlay);

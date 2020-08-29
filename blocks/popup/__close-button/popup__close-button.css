@@ -1,4 +1,4 @@
-.button_type_close {
+.popup__close-button {  
   background-image: url(../../../images/Close-Icon.svg);
   background-color: transparent;
   background-size: cover;
@@ -12,8 +12,12 @@
   top: -32px;
 }
 
+.popup__close-button:hover {
+  opacity: .6;
+}
+
 @media all and (max-width: 512px) {
-  .button_type_close {
+  .popup__close-button {
     right: 5px;
     top: 5px;
     filter: invert(100%);

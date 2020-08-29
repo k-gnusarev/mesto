@@ -14,3 +14,11 @@
 .popup__text:active {
   outline: none;
 }
+
+.popup__text:first-of-type {  
+  margin-bottom: 29px;
+}
+
+.popup__text:last-of-type {
+  margin-bottom: 48px;
+}

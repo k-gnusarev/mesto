@@ -8,7 +8,7 @@
 </head>
 <body class="page">
   <header class="header">
-    <div class="logo"></div>      
+    <img src="./images/logo.svg" class="logo" alt="Логотип Mesto Russia">
   </header>
   <main class="main">
     <section class="profile">
@@ -16,73 +16,71 @@
       <div class="profile__description">
         <div class="profile__title-container">
           <h1 class="profile__title">Юрий Кнорозов</h1>
-          <button class="button button_type_edit"></button>
+          <button type="button" class="button profile__edit-button"></button>
         </div>       
         <p class="profile__subtitle">Историк</p>
       </div>
-      <div class="profile__add-section">
-        <button class="button button_type_add"></button>
-      </div>
+      <button type="button" class="button profile__add-button"></button>
     </section>
     <section class="content">
       <div class="card">
         <img src="./images/christopher-crouzet-ieYbISorNPY-unsplash.jpg" alt="На фото: вид с высоты на долину реки" class="card__photo">
         <div class="card__menu">
           <h2 class="card__title">Семук-Чампей</h2>
-          <button class="button button_type_like"></button>
+          <button type="button" class="button card__like-button"></button>
         </div>        
       </div>
       <div class="card">
         <img src="./images/clovis-castaneda--97MyV1TOJk-unsplash.jpg" alt="На фото: колониальный город с видом на вулкан" class="card__photo">
         <div class="card__menu">
           <h2 class="card__title">Антигуа-Гватемала</h2>
-          <button class="button button_type_like"></button>
+          <button type="button" class="button card__like-button"></button>
         </div>        
       </div>
       <div class="card">
         <img src="./images/gary-saldana-KRttQCXUjNI-unsplash.jpg" alt="На фото: вид на извергающийся вулкан" class="card__photo">
         <div class="card__menu">
           <h2 class="card__title">Вулкан Фуэго</h2>
-          <button class="button button_type_like"></button>
+          <button type="button" class="button card__like-button"></button>
         </div>        
       </div>
       <div class="card">
         <img src="./images/jimmy-baum-N4gc_5rZ9dM-unsplash.jpg" alt="На фото: руины индейских пирамид" class="card__photo">
         <div class="card__menu">
           <h2 class="card__title">Тикаль</h2>
-          <button class="button button_type_like"></button>
+          <button type="button" class="button card__like-button"></button>
         </div>        
       </div>
       <div class="card">
         <img src="./images/mathijs-beks-Lej_-3cke2c-unsplash.jpg" alt="На фото: вид на озеро с вулканом на фоне" class="card__photo">
         <div class="card__menu">
           <h2 class="card__title">Озеро Атитлан</h2>
-          <button class="button button_type_like"></button>
+          <button type="button" class="button card__like-button"></button>
         </div>        
       </div>
       <div class="card">
         <img src="./images/michiel-ton-IfWczb2j4wU-unsplash.jpg" alt="На фото: вид на город с воды" class="card__photo">
         <div class="card__menu">
           <h2 class="card__title">Остров Флорес</h2>
-          <button class="button button_type_like"></button>
+          <button type="button" class="button card__like-button"></button>
         </div>        
       </div>
     </section>
   </main>
   <footer class="footer">
-    © 2020 Mesto Russia
+    <p class="footer__copyright">© 2020 Mesto Russia</p>
   </footer>
   <div class="popup">
     <div class="popup__container">
-      <button class="button button_type_close"></button>
+      <button type="button" class="button popup__close-button"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
-      <div class="popup__form">
-        <input type="text" placeholder="Имя профиля" class="popup__text popup__text_type_title">
-        <input type="text" placeholder="Описание профиля" class="popup__text popup__text_type_subtitle">
-        <button type="submit" class="button button_type_save">
+      <form class="popup__form">
+        <input type="text" name="title" placeholder="Имя профиля" class="popup__text">
+        <input type="text" name="subtitle" placeholder="Описание профиля" class="popup__text">
+        <button type="submit" class="button popup__submit-button">
           Сохранить
         </button>
-      </div>
+      </form>
     </div>
   </div>
   <script src="./scripts/index.js" defer></script>

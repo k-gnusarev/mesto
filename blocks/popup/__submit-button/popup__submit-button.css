@@ -1,4 +1,4 @@
-.button_type_save {
+.popup__submit-button {  
   height: 50px;
 
   font-size: 18px;
@@ -11,6 +11,6 @@
   background-size: auto;
 }
 
-.button_type_save:hover {
+.popup__submit-button:hover {  
   background: rgba(0, 0, 0, 0.8);
 }
