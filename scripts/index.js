@@ -1,6 +1,9 @@
 const popup = document.querySelector('.popup');
+const popupHeader = document.querySelector('.popup__title');
 const editButton = document.querySelector('.profile__edit-button');
+const addButton = document.querySelector('.profile__add-button');
 const closeButton = popup.querySelector('.popup__close-button');
+const submitButton = popup.querySelector('.popup__submit-button');
 const editForm = document.querySelector('.popup__form');
 
 // переменные для полей попапа
@@ -11,13 +14,34 @@ let popupSubtitleField = popup.querySelector('input[name="subtitle"]');
 let currentProfileTitle = document.querySelector('.profile__title');
 let currentProfileSubtitle = document.querySelector('.profile__subtitle');
 
+// объект, в котором хранятся свойства попапа
+const popupProperties = {
+  headingText: '',
+  titleFieldPlaceholder: '',
+  subtitleFieldPlaceholder: '',
+  submitText: ''
+}
+
 // выключатель окна редактирования профиля
 const togglePopup = function () {
   popup.classList.toggle('popup_opened');
+
+  popupHeader.textContent = popupProperties.headingText;
+  popupTitleField.setAttribute('placeholder', popupProperties.titleFieldPlaceholder);
+  popupSubtitleField.setAttribute('placeholder', popupProperties.subtitleFieldPlaceholder);
+  submitButton.textContent = popupProperties.submitText;
+
+  popupTitleField.value = '';  
+  popupSubtitleField.value = '';
 }
 
 // вызвать окно редактирования профиля
 const editButtonPressed = function () {
+  popupProperties.headingText = 'Редактировать профиль';  
+  popupProperties.titleFieldPlaceholder = 'Имя профиля';  
+  popupProperties.subtitleFieldPlaceholder = 'Описание профиля';
+  popupProperties.submitText = 'Сохранить';
+
   togglePopup();
 
   // вынести имя и описание профиля по умолчанию в текстовые поля попапа
@@ -25,8 +49,18 @@ const editButtonPressed = function () {
   popupSubtitleField.value = currentProfileSubtitle.innerText;
 }
 
+// вызвать окно добавления места
+const addButtonPressed = function () {  
+  popupProperties.headingText = 'Новое место';  
+  popupProperties.titleFieldPlaceholder = 'Название';  
+  popupProperties.subtitleFieldPlaceholder = 'Ссылка на картинку';
+  popupProperties.submitText = 'Создать';
+
+  togglePopup();
+}
+
 // сохранить изменения профиля и закрыть попап
-let formSubmit = function (event) {
+const formSubmit = function (event) {
   event.preventDefault();
 
   currentProfileTitle.textContent = popupTitleField.value;
@@ -44,6 +78,7 @@ const popupCloseByClickOnOverlay = (event) => {
 }
 
 editButton.addEventListener('click', editButtonPressed);
+addButton.addEventListener('click', addButtonPressed);
 closeButton.addEventListener('click', togglePopup);
 editForm.addEventListener('submit', formSubmit);
 popup.addEventListener('click', popupCloseByClickOnOverlay);
