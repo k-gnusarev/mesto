@@ -2,9 +2,12 @@ const popup = document.querySelector('.popup');
 const popupHeader = document.querySelector('.popup__title');
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
+const likeButton = document.querySelectorAll('.card__like-button');
 const closeButton = popup.querySelector('.popup__close-button');
 const submitButton = popup.querySelector('.popup__submit-button');
 const editForm = document.querySelector('.popup__form');
+
+console.log(likeButton);
 
 // переменные для полей попапа
 let popupTitleField = popup.querySelector('input[name="title"]');
@@ -22,15 +25,44 @@ const popupProperties = {
   submitText: ''
 }
 
+// изначальные карточки
+
+const initialCards = [
+  {
+      name: 'Семук-Чампей',
+      link: 'https://images.unsplash.com/photo-1525454240972-e37288888ff0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80'
+  },
+  {
+      name: 'Челябинская область',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+      name: 'Иваново',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+      name: 'Камчатка',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+      name: 'Холмогорский район',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+      name: 'Байкал',
+      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  }
+];
+
 // выключатель окна редактирования профиля
 const togglePopup = function () {
   popup.classList.toggle('popup_opened');
 
+  // задать свойства полей, соответствующие функции попапа
   popupHeader.textContent = popupProperties.headingText;
   popupTitleField.setAttribute('placeholder', popupProperties.titleFieldPlaceholder);
   popupSubtitleField.setAttribute('placeholder', popupProperties.subtitleFieldPlaceholder);
   submitButton.textContent = popupProperties.submitText;
-
   popupTitleField.value = '';  
   popupSubtitleField.value = '';
 }
@@ -77,6 +109,13 @@ const popupCloseByClickOnOverlay = (event) => {
   togglePopup();
 }
 
+// поставить/убрать лайк
+
+const toggleLike = function () {
+  likeButton.classList.toggle('card__like-button_active');
+}
+
+likeButton.addEventListener('click', toggleLike);
 editButton.addEventListener('click', editButtonPressed);
 addButton.addEventListener('click', addButtonPressed);
 closeButton.addEventListener('click', togglePopup);
