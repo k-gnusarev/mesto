@@ -2,12 +2,10 @@ const popup = document.querySelector('.popup');
 const popupHeader = document.querySelector('.popup__title');
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
-const likeButton = document.querySelectorAll('.card__like-button');
+const likeButton = document.querySelector('.card__like-button');
 const closeButton = popup.querySelector('.popup__close-button');
 const submitButton = popup.querySelector('.popup__submit-button');
 const editForm = document.querySelector('.popup__form');
-
-console.log(likeButton);
 
 // переменные для полей попапа
 let popupTitleField = popup.querySelector('input[name="title"]');
@@ -23,6 +21,12 @@ const popupProperties = {
   titleFieldPlaceholder: '',
   subtitleFieldPlaceholder: '',
   submitText: ''
+}
+
+// прогрузить начальные карточки
+
+const renderCards = () => {
+  
 }
 
 // изначальные карточки
@@ -54,18 +58,34 @@ const initialCards = [
   }
 ];
 
+// закрытие окна по окончанию анимации
+const popupClose = () => {  
+  popup.classList.toggle('popup_state_closed');
+  popup.classList.toggle('popup_state_opened');
+  popup.removeAttribute('style');
+  popup.removeEventListener('animationend', popupClose);
+  popupTitleField.value = '';  
+  popupSubtitleField.value = '';
+} 
+
 // выключатель окна редактирования профиля
-const togglePopup = function () {
-  popup.classList.toggle('popup_opened');
+const togglePopup = () => {
+  if (popup.classList.value.includes('popup_state_closed')) {
+    popup.classList.toggle('popup_state_opened');
+    popup.classList.toggle('popup_state_closed');
+  } else {
+    // подождать окончания анимации, затем убрать попап
+    popup.style.animation = 'hidePopup .2s linear forwards';
+    popup.addEventListener('animationend', popupClose);
+  }
 
   // задать свойства полей, соответствующие функции попапа
   popupHeader.textContent = popupProperties.headingText;
   popupTitleField.setAttribute('placeholder', popupProperties.titleFieldPlaceholder);
   popupSubtitleField.setAttribute('placeholder', popupProperties.subtitleFieldPlaceholder);
   submitButton.textContent = popupProperties.submitText;
-  popupTitleField.value = '';  
-  popupSubtitleField.value = '';
 }
+
 
 // вызвать окно редактирования профиля
 const editButtonPressed = function () {
