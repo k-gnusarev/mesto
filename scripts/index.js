@@ -68,9 +68,16 @@ initialCards.forEach((place) => {
   cardItem.querySelector('.card__title').textContent = place.name;
   cardItem.querySelector('.card__photo').setAttribute('src', place.link);  
   cardItem.querySelector('.card__photo').setAttribute('alt', place.altText);
+  
+  // like
+  cardItem.querySelector('.card__like-button').addEventListener('click', function (evt) {
+    evt.target.classList.toggle('card__like-button_active');
+  });
 
   // разместить карточки
   document.querySelector('.content').append(cardItem);
+
+
 });
 
 // закрытие окна по окончанию анимации
