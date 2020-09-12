@@ -23,54 +23,7 @@
       <button type="button" class="button profile__add-button"></button>
     </section>
     <section class="content">
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1525454240972-e37288888ff0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80" alt="На фото: вид с высоты на долину реки" class="card__photo">
-        <div class="card__menu">
-          <h2 class="card__title">Семук-Чампей</h2>
-          <button type="button" class="button card__like-button"></button>
-        </div>
-        <button class="button card__delete-button"></button>
-      </div>
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1563442744-3e17a3bf4932?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjE0MjB9&auto=format&fit=crop&w=1950&q=80" alt="На фото: колониальный город с видом на вулкан" class="card__photo">
-        <div class="card__menu">
-          <h2 class="card__title">Антигуа-Гватемала</h2>
-          <button type="button" class="button card__like-button"></button>
-        </div>
-        <button class="button card__delete-button"></button>
-      </div>
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1506467493604-25d7861a6703?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1934&q=80" alt="На фото: вид на извергающийся вулкан" class="card__photo">
-        <div class="card__menu">
-          <h2 class="card__title">Вулкан Фуэго</h2>
-          <button type="button" class="button card__like-button"></button>
-        </div>
-        <button class="button card__delete-button"></button>
-      </div>
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1508035460735-91088c495500?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80" alt="На фото: руины индейских пирамид" class="card__photo">
-        <div class="card__menu">
-          <h2 class="card__title">Тикаль</h2>
-          <button type="button" class="button card__like-button"></button>
-        </div>
-        <button class="button card__delete-button"></button>
-      </div>
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1528543010705-e7e75169b717?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1934&q=80" alt="На фото: вид на озеро с вулканом на фоне" class="card__photo">
-        <div class="card__menu">
-          <h2 class="card__title">Озеро Атитлан</h2>
-          <button type="button" class="button card__like-button"></button>
-        </div>
-        <button class="button card__delete-button"></button>
-      </div>
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1544527232-c8738c8cb2cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80" alt="На фото: вид на город с воды" class="card__photo">
-        <div class="card__menu">
-          <h2 class="card__title">Остров Флорес</h2>
-          <button type="button" class="button card__like-button"></button>
-        </div>
-        <button class="button card__delete-button"></button>
-      </div>
+      
     </section>
   </main>
   <footer class="footer">
@@ -88,8 +41,15 @@
       </form>
     </div>
   </div>
-  <template>
-
+  <template class="card-template">
+    <div class="card">
+      <img class="card__photo">
+      <div class="card__menu">
+        <h2 class="card__title"></h2>
+        <button type="button" class="button card__like-button"></button>
+      </div>
+      <button class="button card__delete-button"></button>
+    </div>
   </template>
   <script src="./scripts/index.js" defer></script>
 </body>

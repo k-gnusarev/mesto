@@ -23,40 +23,55 @@ const popupProperties = {
   submitText: ''
 }
 
-// прогрузить начальные карточки
-
-const renderCards = () => {
-  
-}
-
 // изначальные карточки
 
 const initialCards = [
   {
-      name: 'Семук-Чампей',
-      link: 'https://images.unsplash.com/photo-1525454240972-e37288888ff0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80'
+    name: 'Семук-Чампей',
+    link: 'https://images.unsplash.com/photo-1525454240972-e37288888ff0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80',
+    altText: 'На фото: вид с высоты на долину реки'
   },
   {
-      name: 'Челябинская область',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+    name: 'Антигуа-Гватемала',
+    link: 'https://images.unsplash.com/photo-1563442744-3e17a3bf4932?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjE0MjB9&auto=format&fit=crop&w=1950&q=80',
+    altText: 'На фото: колониальный город с видом на вулкан'
   },
   {
-      name: 'Иваново',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+    name: 'Вулкан Фуэго',
+    link: 'https://images.unsplash.com/photo-1506467493604-25d7861a6703?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1934&q=80',
+    altText: 'На фото: вид на извергающийся вулкан'
   },
   {
-      name: 'Камчатка',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+    name: 'Тикаль',
+    link: 'https://images.unsplash.com/photo-1508035460735-91088c495500?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80',
+    altText: 'На фото: руины индейских пирамид'
   },
   {
-      name: 'Холмогорский район',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+    name: 'Озеро Атитлан',
+    link: 'https://images.unsplash.com/photo-1528543010705-e7e75169b717?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1934&q=80',
+    altText: 'На фото: вид на озеро с вулканом на фоне'
   },
   {
-      name: 'Байкал',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+    name: 'Остров Флорес',
+    link: 'https://images.unsplash.com/photo-1544527232-c8738c8cb2cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80',
+    altText: 'На фото: вид на город с воды'
   }
 ];
+
+// прогрузить начальные карточки
+initialCards.forEach((place) => {
+  // скопировать новый элемент из темплейта
+  const cardTemplate = document.querySelector('.card-template').content;
+  const cardItem = cardTemplate.cloneNode(true);
+
+  // вписать соответствующие данные карточки
+  cardItem.querySelector('.card__title').textContent = place.name;
+  cardItem.querySelector('.card__photo').setAttribute('src', place.link);  
+  cardItem.querySelector('.card__photo').setAttribute('alt', place.altText);
+
+  // разместить карточки
+  document.querySelector('.content').append(cardItem);
+});
 
 // закрытие окна по окончанию анимации
 const popupClose = () => {  
@@ -135,7 +150,7 @@ const toggleLike = function () {
   likeButton.classList.toggle('card__like-button_active');
 }
 
-likeButton.addEventListener('click', toggleLike);
+//likeButton.addEventListener('click', toggleLike);
 editButton.addEventListener('click', editButtonPressed);
 addButton.addEventListener('click', addButtonPressed);
 closeButton.addEventListener('click', togglePopup);
