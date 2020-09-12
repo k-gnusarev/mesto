@@ -53,8 +53,6 @@ const initialCards = [
   }
 ];
 
-
-
 // выключатель попапа
 const togglePopup = (target) => {
   if
@@ -90,9 +88,17 @@ const toggleAddPopup = (evt) => {
   togglePopup(evt.target);
 }
 
+// удалить карточку
+
+const deleteCard = (card) => {
+  console.log(document.querySelectorAll('.card')); 
+}
+
+
+
 // разместить новую карточку
 
-const postNewCard = (place, link) => {
+const renderCard = (place, link) => {
   const cardTemplate = document.querySelector('.card-template').content;
   const cardItem = cardTemplate.cloneNode(true);
 
@@ -104,11 +110,15 @@ const postNewCard = (place, link) => {
     evt.target.classList.toggle('card__like-button_active');
   });
 
+  // установить кнопку удаления
+  cardItem.querySelector('.card__delete-button').addEventListener('click', function (evt) {
+    evt.target.parentNode.remove(); 
+  });
   document.querySelector('.content').prepend(cardItem);
 }
 
 // прогрузить начальные карточки
-initialCards.forEach(defaultCard => postNewCard(defaultCard.name, defaultCard.link));
+initialCards.forEach(defaultCard => renderCard(defaultCard.name, defaultCard.link));
 
 // добавить новую карточку
 const submitAddForm = (evt) => {
@@ -116,7 +126,7 @@ const submitAddForm = (evt) => {
   const newPlace = newPlaceTitleField.value;
   const newLink = newLinkSubtitleField.value;
 
-  postNewCard(newPlace, newLink);
+  renderCard(newPlace, newLink);
   
   addPopup.classList.toggle('popup_active');
 
