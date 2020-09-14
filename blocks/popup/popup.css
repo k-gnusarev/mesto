@@ -11,9 +11,10 @@
   justify-content: space-around;
 
   display: flex;
-
-  
+    
   visibility: hidden;
   opacity: 0;
   transition: visibility 0.2s ease-in-out, opacity 0.2s ease-in-out;
+
+  z-index: 2;
 }

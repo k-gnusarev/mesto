@@ -10,6 +10,8 @@
   position: absolute;
   right: 15px;
   top: 18px;
+
+  z-index: 1;
 }
 
 .card__delete-button:hover {

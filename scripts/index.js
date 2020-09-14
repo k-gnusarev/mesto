@@ -1,28 +1,26 @@
 // ссылки на элементы формы редактирования профиля
-const editPopup = document.querySelector('.popup_type_edit');
 const editButton = document.querySelector('.profile__edit-button');
-const editForm = document.querySelector('.popup__form_type_edit');
-const editPopupCloseButton = editPopup.querySelector('.popup__close-button');
+const editPopup = document.querySelector('.popup_type_edit');
+const editForm = editPopup.querySelector('form[name="edit-profile"]');
+const titleField = editPopup.querySelector('input[name="title"]');
+const subtitleField = editPopup.querySelector('input[name="subtitle"]');
 
 // ссылки на элементы формы добавления карточки
-const addPopup = document.querySelector('.popup_type_add');
 const addButton = document.querySelector('.profile__add-button');
-const addForm = document.querySelector('.popup__form_type_add');
-const addPopupCloseButton = addPopup.querySelector('.popup__close-button');
+const addPopup = document.querySelector('.popup_type_add');
+const addForm = addPopup.querySelector('form[name="add-place"]');
+const newPlaceField = addPopup.querySelector('input[name="placeName"]');
+const newLinkField = addPopup.querySelector('input[name="placeLink"]');
 
-const likeButton = document.querySelector('.card__like-button');
+// ссылка на попап просмотра фото
+const viewerPopup = document.querySelector('.popup_type_viewer');
 
-// переменные для полей попапа редактирования профиля
-const popupTitleField = editPopup.querySelector('input[name="title"]');
-const popupSubtitleField = editPopup.querySelector('input[name="subtitle"]');
-
-// переменные для текущих имени и описания профиля
+// ссылки для текущих имени и описания профиля
 const currentProfileTitle = document.querySelector('.profile__title');
 const currentProfileSubtitle = document.querySelector('.profile__subtitle');
 
-// переменные для полей попапа добавления места
-const newPlaceTitleField = addPopup.querySelector('input[name="placeName"]');
-const newLinkSubtitleField = addPopup.querySelector('input[name="placeLink"]');
+// ссылки на элементы карточки
+const likeButton = document.querySelector('.card__like-button');
 
 // изначальные карточки
 
@@ -53,57 +51,69 @@ const initialCards = [
   }
 ];
 
-// выключатель попапа
-const togglePopup = (target) => {
-  if
-  ((target === editButton && !editPopup.classList.value.includes('popup_active')) ||
-  (target === editPopupCloseButton && editPopup.classList.value.includes('popup_active'))  
-  ) {
-    editPopup.classList.toggle('popup_active');
-  }
-  else if
-  ((target === addButton && !addPopup.classList.value.includes('popup_active')) ||
-  (target === addPopupCloseButton && addPopup.classList.value.includes('popup_active'))   
-  ) {
-    addPopup.classList.toggle('popup_active');
-  }
+// выключатели попапа
+const openPopup = (target) => {
+  target.classList.add('popup_active');  
 }
 
-// вызвать окно редактирования профиля
-const toggleEditPopup = (evt) => {
-  togglePopup(evt.target);
-  // вынести имя и описание профиля по умолчанию в текстовые поля попапа
-  popupTitleField.value = currentProfileTitle.innerText;  
-  popupSubtitleField.value = currentProfileSubtitle.innerText;
+const closePopup = () => {
+  editPopup.classList.remove('popup_active');
+  addPopup.classList.remove('popup_active');
+  viewerPopup.classList.remove('popup_active');
+}
+
+// вызвать попап просмотра фото
+
+const togglePhotoViewer = (link, title, alt) => {
+  // передать атрибуты фотографий и заголовок фото
+  viewerPopup.querySelector('.popup__photo').setAttribute('src', link);
+  viewerPopup.querySelector('.popup__photo').setAttribute('alt', alt);
+  viewerPopup.querySelector('.popup__photo-title').textContent = title;
+
+  // сделать попап просмотра фото видимым 
+  viewerPopup.classList.add('popup_active');
+
+  // добавить обработчики для закрытия
+  viewerPopup.querySelector('.popup__close-button').addEventListener('click', closePopup);  
+  viewerPopup.addEventListener('click', popupCloseByClickOnOverlay);
 }
 
 // передать изменения информации профиля
 const saveProfileChanges = () => {
-  currentProfileTitle.textContent = popupTitleField.value;
-  currentProfileSubtitle.textContent = popupSubtitleField.value;
+  currentProfileTitle.textContent = titleField.value;
+  currentProfileSubtitle.textContent = subtitleField.value;
 }
 
-// вызвать окно добавления места
-const toggleAddPopup = (evt) => {
-  togglePopup(evt.target);
+// сохранить изменения профиля и закрыть попап
+const submitEditForm = (evt) => {
+  evt.preventDefault();
+  saveProfileChanges();  
+  closePopup();
 }
 
-// удалить карточку
-
-const deleteCard = (card) => {
-  console.log(document.querySelectorAll('.card')); 
+// вызвать окно редактирования профиля
+const toggleEditPopup = () => {
+  openPopup(editPopup);
+  // вписать в поля текущие значения имени и описания
+  titleField.value = currentProfileTitle.textContent;
+  subtitleField.value = currentProfileSubtitle.textContent;
+  
+  // добавить обработчики закрытия и отправки формы
+  editPopup.querySelector('.popup__close-button').addEventListener('click', closePopup);
+  editForm.addEventListener('submit', submitEditForm);
 }
-
-
 
 // разместить новую карточку
 
 const renderCard = (place, link) => {
+  // склонировать шаблон новой карточки
   const cardTemplate = document.querySelector('.card-template').content;
   const cardItem = cardTemplate.cloneNode(true);
 
-  cardItem.querySelector('.card__title').textContent = place;
+  // записать атрибуты и заголовок в новую карточку
+  cardItem.querySelector('.card__photo').setAttribute('alt', 'На фото: ' + place);
   cardItem.querySelector('.card__photo').setAttribute('src', link);
+  cardItem.querySelector('.card__title').textContent = place;  
 
   // установить кнопку лайка
   cardItem.querySelector('.card__like-button').addEventListener('click', function (evt) {
@@ -114,49 +124,57 @@ const renderCard = (place, link) => {
   cardItem.querySelector('.card__delete-button').addEventListener('click', function (evt) {
     evt.target.parentNode.remove(); 
   });
+  
+  // установить переход в окно просмотра
+  cardItem.querySelector('.card__photo').addEventListener('click', function (evt) {
+    const currentPhotoLink = evt.target.getAttribute('src');
+    const currentPhotoTitle = place;
+    const currentPhotoAlt = evt.target.getAttribute('alt');
+
+    togglePhotoViewer(currentPhotoLink, currentPhotoTitle, currentPhotoAlt);
+  });
+
   document.querySelector('.content').prepend(cardItem);
+}
+
+// добавить новую карточку
+const submitAddForm = (evt) => {
+  evt.preventDefault();
+  const newPlace = newPlaceField.value;
+  const newLink = newLinkField.value;
+
+  // передать значения полей в функцию для построения карточки
+  renderCard(newPlace, newLink);
+  
+  closePopup();
+
+  newPlaceField.value = '';
+  newLinkField.value = '';
+}
+
+// вызвать окно добавления места
+const toggleAddPopup = () => {
+  openPopup(addPopup);
+
+  // добавить обработчики закрытия и отправки формы
+  addPopup.querySelector('.popup__close-button').addEventListener('click', closePopup);
+  addForm.addEventListener('submit', submitAddForm);
 }
 
 // прогрузить начальные карточки
 initialCards.forEach(defaultCard => renderCard(defaultCard.name, defaultCard.link));
 
-// добавить новую карточку
-const submitAddForm = (evt) => {
-  evt.preventDefault();
-  const newPlace = newPlaceTitleField.value;
-  const newLink = newLinkSubtitleField.value;
-
-  renderCard(newPlace, newLink);
-  
-  addPopup.classList.toggle('popup_active');
-
-  newPlaceTitleField.value = '';
-  newLinkSubtitleField.value = '';
-};
-
-// сохранить изменения профиля и закрыть попап
-const submitEditForm = (event) => {
-  event.preventDefault();
-  saveProfileChanges();  
-  editPopup.classList.toggle('popup_active');
-}
-
 const popupCloseByClickOnOverlay = (evt) => {
-  if (evt.target === editPopup) {
-    editPopup.classList.toggle('popup_active');
-  } else if (evt.target === addPopup) {
-    addPopup.classList.toggle('popup_active');
-  }
+  if (evt.target !== evt.currentTarget) {
+    return;
+  } 
+  closePopup();
 }
 
 // обработчики формы редактирования профиля
 editButton.addEventListener('click', toggleEditPopup);
-editPopupCloseButton.addEventListener('click', toggleEditPopup);
 editPopup.addEventListener('click', popupCloseByClickOnOverlay);
-editForm.addEventListener('submit', submitEditForm);
 
 // обработчики формы добавления карточки
 addButton.addEventListener('click', toggleAddPopup);
-addPopupCloseButton.addEventListener('click', toggleAddPopup);
 addPopup.addEventListener('click', popupCloseByClickOnOverlay);
-addForm.addEventListener('submit', submitAddForm);

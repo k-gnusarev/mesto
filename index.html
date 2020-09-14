@@ -23,7 +23,6 @@
       <button type="button" class="button profile__add-button"></button>
     </section>
     <section class="content">
-      
     </section>
   </main>
   <footer class="footer">
@@ -33,7 +32,7 @@
     <div class="popup__container">
       <button type="button" class="button popup__close-button"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
-      <form name="edit-profile" class="popup__form popup__form_type_edit">
+      <form name="edit-profile" class="popup__form">
         <input type="text" name="title" class="popup__text" placeholder="Имя профиля">
         <input type="text" name="subtitle" class="popup__text" placeholder="Описание профиля">
         <button type="submit" class="button popup__submit-button">Сохранить</button>
@@ -49,6 +48,13 @@
         <input type="text" name="placeLink" class="popup__text" placeholder="Ссылка на картинку">
         <button type="submit" class="button popup__submit-button">Сохранить</button>
       </form>
+    </div>
+  </div>   
+  <div class="popup popup_type_viewer">
+    <div class="popup__photo-container">
+      <button type="button" class="button popup__close-button"></button>
+      <img class="popup__photo">
+      <p class="popup__photo-title"></p>          
     </div>
   </div>
   <template class="card-template">
