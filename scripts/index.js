@@ -62,6 +62,14 @@ const closePopup = () => {
   viewerPopup.classList.remove('popup_active');
 }
 
+// закрытие попапа по щелчку по затемненной зоне
+const popupCloseByClickOnOverlay = (evt) => {
+  if (evt.target !== evt.currentTarget) {
+    return;
+  } 
+  closePopup();
+}
+
 // вызвать попап просмотра фото
 
 const togglePhotoViewer = (link, title, alt) => {
@@ -70,12 +78,12 @@ const togglePhotoViewer = (link, title, alt) => {
   viewerPopup.querySelector('.popup__photo').setAttribute('alt', alt);
   viewerPopup.querySelector('.popup__photo-title').textContent = title;
 
-  // сделать попап просмотра фото видимым 
-  viewerPopup.classList.add('popup_active');
-
   // добавить обработчики для закрытия
   viewerPopup.querySelector('.popup__close-button').addEventListener('click', closePopup);  
   viewerPopup.addEventListener('click', popupCloseByClickOnOverlay);
+
+  // сделать попап просмотра фото видимым 
+  viewerPopup.classList.add('popup_active');
 }
 
 // передать изменения информации профиля
@@ -93,7 +101,6 @@ const submitEditForm = (evt) => {
 
 // вызвать окно редактирования профиля
 const toggleEditPopup = () => {
-  openPopup(editPopup);
   // вписать в поля текущие значения имени и описания
   titleField.value = currentProfileTitle.textContent;
   subtitleField.value = currentProfileSubtitle.textContent;
@@ -101,6 +108,8 @@ const toggleEditPopup = () => {
   // добавить обработчики закрытия и отправки формы
   editPopup.querySelector('.popup__close-button').addEventListener('click', closePopup);
   editForm.addEventListener('submit', submitEditForm);
+
+  openPopup(editPopup);
 }
 
 // разместить новую карточку
@@ -143,33 +152,26 @@ const submitAddForm = (evt) => {
   const newPlace = newPlaceField.value;
   const newLink = newLinkField.value;
 
+  closePopup();
+
   // передать значения полей в функцию для построения карточки
   renderCard(newPlace, newLink);
   
-  closePopup();
-
   newPlaceField.value = '';
   newLinkField.value = '';
 }
 
 // вызвать окно добавления места
 const toggleAddPopup = () => {
-  openPopup(addPopup);
-
   // добавить обработчики закрытия и отправки формы
   addPopup.querySelector('.popup__close-button').addEventListener('click', closePopup);
   addForm.addEventListener('submit', submitAddForm);
+
+  openPopup(addPopup);
 }
 
 // прогрузить начальные карточки
 initialCards.forEach(defaultCard => renderCard(defaultCard.name, defaultCard.link));
-
-const popupCloseByClickOnOverlay = (evt) => {
-  if (evt.target !== evt.currentTarget) {
-    return;
-  } 
-  closePopup();
-}
 
 // обработчики формы редактирования профиля
 editButton.addEventListener('click', toggleEditPopup);
