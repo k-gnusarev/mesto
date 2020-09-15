@@ -12,8 +12,9 @@ const addForm = addPopup.querySelector('form[name="add-place"]');
 const newPlaceField = addPopup.querySelector('input[name="placeName"]');
 const newLinkField = addPopup.querySelector('input[name="placeLink"]');
 
-// ссылка на попап просмотра фото
+// ссылки на элементы просмотрщика фото 
 const viewerPopup = document.querySelector('.popup_type_viewer');
+const popupPhoto = viewerPopup.querySelector('.popup__photo');
 
 // ссылки для текущих имени и описания профиля
 const currentProfileTitle = document.querySelector('.profile__title');
@@ -21,6 +22,9 @@ const currentProfileSubtitle = document.querySelector('.profile__subtitle');
 
 // ссылки на элементы карточки
 const likeButton = document.querySelector('.card__like-button');
+
+// прочие глобальные ссылки
+const contentSection = document.querySelector('.content');
 
 // изначальные карточки
 
@@ -52,51 +56,39 @@ const initialCards = [
 ];
 
 // выключатели попапа
+
+const closePopup = (target) => {
+  target.classList.remove('popup_active');
+}
+
 const openPopup = (target) => {
-  target.classList.add('popup_active');  
-}
-
-const closePopup = () => {
-  editPopup.classList.remove('popup_active');
-  addPopup.classList.remove('popup_active');
-  viewerPopup.classList.remove('popup_active');
-}
-
-// закрытие попапа по щелчку по затемненной зоне
-const popupCloseByClickOnOverlay = (evt) => {
-  if (evt.target !== evt.currentTarget) {
-    return;
-  } 
-  closePopup();
+  target.classList.add('popup_active');
+  // добавить открытому попапу обработчик для закрытия
+  target.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close-button')) {
+      closePopup(target);
+    }
+  });
 }
 
 // вызвать попап просмотра фото
 
 const togglePhotoViewer = (link, title, alt) => {
   // передать атрибуты фотографий и заголовок фото
-  viewerPopup.querySelector('.popup__photo').setAttribute('src', link);
-  viewerPopup.querySelector('.popup__photo').setAttribute('alt', alt);
+  popupPhoto.setAttribute('src', link);
+  popupPhoto.setAttribute('alt', alt);
   viewerPopup.querySelector('.popup__photo-title').textContent = title;
 
-  // добавить обработчики для закрытия
-  viewerPopup.querySelector('.popup__close-button').addEventListener('click', closePopup);  
-  viewerPopup.addEventListener('click', popupCloseByClickOnOverlay);
-
   // сделать попап просмотра фото видимым 
-  viewerPopup.classList.add('popup_active');
-}
-
-// передать изменения информации профиля
-const saveProfileChanges = () => {
-  currentProfileTitle.textContent = titleField.value;
-  currentProfileSubtitle.textContent = subtitleField.value;
+  openPopup(viewerPopup);
 }
 
 // сохранить изменения профиля и закрыть попап
 const submitEditForm = (evt) => {
   evt.preventDefault();
-  saveProfileChanges();  
-  closePopup();
+  currentProfileTitle.textContent = titleField.value;
+  currentProfileSubtitle.textContent = subtitleField.value;
+  closePopup(editPopup);
 }
 
 // вызвать окно редактирования профиля
@@ -106,7 +98,6 @@ const toggleEditPopup = () => {
   subtitleField.value = currentProfileSubtitle.textContent;
   
   // добавить обработчики закрытия и отправки формы
-  editPopup.querySelector('.popup__close-button').addEventListener('click', closePopup);
   editForm.addEventListener('submit', submitEditForm);
 
   openPopup(editPopup);
@@ -118,10 +109,11 @@ const renderCard = (place, link) => {
   // склонировать шаблон новой карточки
   const cardTemplate = document.querySelector('.card-template').content;
   const cardItem = cardTemplate.cloneNode(true);
+  const cardPhoto = cardItem.querySelector('.card__photo');
 
   // записать атрибуты и заголовок в новую карточку
-  cardItem.querySelector('.card__photo').setAttribute('alt', 'На фото: ' + place);
-  cardItem.querySelector('.card__photo').setAttribute('src', link);
+  cardPhoto.setAttribute('alt', 'На фото: ' + place);
+  cardPhoto.setAttribute('src', link);
   cardItem.querySelector('.card__title').textContent = place;  
 
   // установить кнопку лайка
@@ -134,8 +126,8 @@ const renderCard = (place, link) => {
     evt.target.parentNode.remove(); 
   });
   
-  // установить переход в окно просмотра
-  cardItem.querySelector('.card__photo').addEventListener('click', function (evt) {
+  // задать переход в окно просмотра
+  cardPhoto.addEventListener('click', function (evt) {
     const currentPhotoLink = evt.target.getAttribute('src');
     const currentPhotoTitle = place;
     const currentPhotoAlt = evt.target.getAttribute('alt');
@@ -143,19 +135,19 @@ const renderCard = (place, link) => {
     togglePhotoViewer(currentPhotoLink, currentPhotoTitle, currentPhotoAlt);
   });
 
-  document.querySelector('.content').prepend(cardItem);
+  contentSection.prepend(cardItem);
 }
 
 // добавить новую карточку
 const submitAddForm = (evt) => {
   evt.preventDefault();
-  const newPlace = newPlaceField.value;
-  const newLink = newLinkField.value;
-
-  closePopup();
 
   // передать значения полей в функцию для построения карточки
+  const newPlace = newPlaceField.value;
+  const newLink = newLinkField.value;
   renderCard(newPlace, newLink);
+
+  closePopup(addPopup);
   
   newPlaceField.value = '';
   newLinkField.value = '';
@@ -163,20 +155,16 @@ const submitAddForm = (evt) => {
 
 // вызвать окно добавления места
 const toggleAddPopup = () => {
-  // добавить обработчики закрытия и отправки формы
-  addPopup.querySelector('.popup__close-button').addEventListener('click', closePopup);
+  // добавить обработчик отправки формы
   addForm.addEventListener('submit', submitAddForm);
-
   openPopup(addPopup);
 }
 
-// прогрузить начальные карточки
-initialCards.forEach(defaultCard => renderCard(defaultCard.name, defaultCard.link));
-
 // обработчики формы редактирования профиля
 editButton.addEventListener('click', toggleEditPopup);
-editPopup.addEventListener('click', popupCloseByClickOnOverlay);
 
 // обработчики формы добавления карточки
 addButton.addEventListener('click', toggleAddPopup);
-addPopup.addEventListener('click', popupCloseByClickOnOverlay);
+
+// прогрузить начальные карточки
+initialCards.forEach(defaultCard => renderCard(defaultCard.name, defaultCard.link));
