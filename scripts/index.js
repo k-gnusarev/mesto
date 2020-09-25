@@ -55,6 +55,24 @@ const initialCards = [
   }
 ];
 
+// удалить слушатель для Esc
+
+// const removeEscListener = (evt) => {
+//   console.log(evt.key);
+//   if ()
+// }
+
+// добавить слушатель для Esc
+
+// const addEscListener = (target) => {
+//   document.addEventListener('keydown', function (evt) {
+//     if (evt.key === 'Escape') {
+//       closePopup(target);
+//       removeEscListener(evt);
+//     }
+//   }, true);
+// }
+
 // выключатели попапа
 
 const closePopup = (target) => {
@@ -68,8 +86,15 @@ const openPopup = (target) => {
     if (evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close-button')) {
       closePopup(target);
     }
-  });
+  });  
 }
+
+const popupCloseByEsc = (evt) => {
+  if (evt.key === 'Escape') {
+    const activePopup = document.querySelector('.popup_active');
+    closePopup(activePopup);
+  }
+} 
 
 // вызвать попап просмотра фото
 
@@ -165,6 +190,10 @@ editButton.addEventListener('click', toggleEditPopup);
 
 // обработчики формы добавления карточки
 addButton.addEventListener('click', toggleAddPopup);
+
+// обработчик клавиши Esc
+
+document.addEventListener('keydown', popupCloseByEsc);
 
 // прогрузить начальные карточки
 initialCards.forEach(defaultCard => renderCard(defaultCard.name, defaultCard.link));
