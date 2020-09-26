@@ -77,6 +77,7 @@ const initialCards = [
 
 const closePopup = (target) => {
   target.classList.remove('popup_active');
+  document.removeEventListener('keydown', popupCloseByEsc);
 }
 
 const openPopup = (target) => {
@@ -86,7 +87,8 @@ const openPopup = (target) => {
     if (evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close-button')) {
       closePopup(target);
     }
-  });  
+  });
+  document.addEventListener('keydown', popupCloseByEsc);
 }
 
 const popupCloseByEsc = (evt) => {
@@ -110,7 +112,6 @@ const togglePhotoViewer = (link, title, alt) => {
 
 // сохранить изменения профиля и закрыть попап
 const submitEditForm = (evt) => {
-  evt.preventDefault();
   currentProfileTitle.textContent = titleField.value;
   currentProfileSubtitle.textContent = subtitleField.value;
   closePopup(editPopup);
@@ -165,8 +166,6 @@ const renderCard = (place, link) => {
 
 // добавить новую карточку
 const submitAddForm = (evt) => {
-  evt.preventDefault();
-
   // передать значения полей в функцию для построения карточки
   const newPlace = newPlaceField.value;
   const newLink = newLinkField.value;
@@ -190,10 +189,6 @@ editButton.addEventListener('click', toggleEditPopup);
 
 // обработчики формы добавления карточки
 addButton.addEventListener('click', toggleAddPopup);
-
-// обработчик клавиши Esc
-
-document.addEventListener('keydown', popupCloseByEsc);
 
 // прогрузить начальные карточки
 initialCards.forEach(defaultCard => renderCard(defaultCard.name, defaultCard.link));

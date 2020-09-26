@@ -9,8 +9,13 @@
   border: none;
   background-color: #000;  
   background-size: auto;
+
+  box-sizing: border-box;
 }
 
-.popup__submit-button:hover {  
+.popup__submit-button:not(:disabled):hover {  
   background: rgba(0, 0, 0, 0.8);
 }
+
+
+
