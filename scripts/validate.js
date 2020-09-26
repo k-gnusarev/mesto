@@ -7,11 +7,13 @@ const params = {
   errorClass: 'popup__form-error_active'
 }
 
+// проверить валидность полей
 const isInputInvalid = (inputList) => {  
   return inputList.some((inputElement) => !inputElement.validity.valid);
 }
 
 const toggleSubmitButton = (inputList, buttonElement) => {
+  // кнопка становится доступной только если все поля валидны
   if (isInputInvalid(inputList)) {
     buttonElement.classList.add(params.inactiveButtonClass);
     buttonElement.setAttribute('disabled', true);
@@ -19,7 +21,7 @@ const toggleSubmitButton = (inputList, buttonElement) => {
     buttonElement.classList.remove(params.inactiveButtonClass);
     buttonElement.removeAttribute('disabled');
   }
-};
+}
 
 const setErrorMessage = (errorMessageElement, errorMessageText) => {
   errorMessageElement.textContent = errorMessageText;
@@ -35,12 +37,12 @@ const checkInputValidity = (popupElement, inputElement) => {
   const inputIsInvalid = !inputElement.validity.valid;
   const errorMessageElement = popupElement.querySelector(`#${inputElement.id}-error`);
   
-  if (inputIsInvalid) {
+    if (inputIsInvalid) {
     const errorMessageText = inputElement.validationMessage;
     setErrorMessage(errorMessageElement, errorMessageText);
   } else {
     hideErrorMessage(errorMessageElement);
-  }
+  };
 }
 
 const setEventListeners = (popupElement, params) => {
@@ -53,6 +55,8 @@ const setEventListeners = (popupElement, params) => {
       toggleSubmitButton(inputList, buttonElement);
     });
   });
+  // отключаем кнопку при вызове модального окна
+  toggleSubmitButton(inputList, buttonElement);
 }
 
 const enableValidation = (params) => {
