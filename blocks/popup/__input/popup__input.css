@@ -15,8 +15,3 @@
 .popup__input:active {
   outline: none;
 }
-
-.popup__input:invalid {
-  border-bottom-color: #f00;
-}
-
