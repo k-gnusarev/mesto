@@ -73,3 +73,4 @@
 @import url(../blocks/popup/__photo/popup__photo.css);
 @import url(../blocks/popup/__form-error/popup__form-error.css);
 @import url(../blocks/popup/__form-error/_active/popup__form-error_active.css);
+@import url(../blocks/popup/__input/_state/popup__input_state_error.css);

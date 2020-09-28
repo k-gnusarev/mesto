@@ -55,40 +55,51 @@ const initialCards = [
   }
 ];
 
-// удалить слушатель для Esc
+// добавить обработчики закрытия попапов
 
-// const removeEscListener = (evt) => {
-//   console.log(evt.key);
-//   if ()
-// }
+const addPopupCloseHandlers = () => {
+  const popupList = Array.from(document.querySelectorAll('.popup'));
 
-// добавить слушатель для Esc
+  popupList.forEach(popupElement => {
+    popupElement.addEventListener('click', (evt) => {
+      const eventTarget = evt.target;
 
-// const addEscListener = (target) => {
-//   document.addEventListener('keydown', function (evt) {
-//     if (evt.key === 'Escape') {
-//       closePopup(target);
-//       removeEscListener(evt);
-//     }
-//   }, true);
-// }
+      if (eventTarget.classList.contains('popup') || eventTarget.classList.contains('popup__close-button')) {
+        closePopup(popupElement);
+      }
+    });
+    document.addEventListener('keydown', popupCloseByEsc);
+  });
+}
+
+// сброс сообщений об ошибках
+
+const resetAllErrors = (form) => {
+  const errorInputList = Array.from(form.querySelectorAll('.popup__input_state_error'));
+  const errorMessageList = Array.from(form.querySelectorAll('.popup__form-error_active'));
+
+  if (errorInputList.length > 0) {
+    errorInputList.forEach(errorInputItem => {
+      errorInputItem.classList.remove('popup__input_state_error');
+    });
+  };
+
+  if (errorMessageList.length > 0) {
+    errorMessageList.forEach(errorMessageItem => {
+      errorMessageItem.classList.remove('popup__form-error_active');
+    });
+  };
+}
 
 // выключатели попапа
 
 const closePopup = (target) => {
   target.classList.remove('popup_active');
-  document.removeEventListener('keydown', popupCloseByEsc);
+  target.removeEventListener('keydown', popupCloseByEsc);
 }
 
 const openPopup = (target) => {
   target.classList.add('popup_active');
-  // добавить открытому попапу обработчик для закрытия
-  target.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close-button')) {
-      closePopup(target);
-    }
-  });
-  document.addEventListener('keydown', popupCloseByEsc);
 }
 
 const popupCloseByEsc = (evt) => {
@@ -111,7 +122,7 @@ const togglePhotoViewer = (link, title, alt) => {
 }
 
 // сохранить изменения профиля и закрыть попап
-const submitEditForm = (evt) => {
+const submitEditForm = () => {
   currentProfileTitle.textContent = titleField.value;
   currentProfileSubtitle.textContent = subtitleField.value;
   closePopup(editPopup);
@@ -119,13 +130,11 @@ const submitEditForm = (evt) => {
 
 // вызвать окно редактирования профиля
 const toggleEditPopup = () => {
+  resetAllErrors(editForm);
   // вписать в поля текущие значения имени и описания
   titleField.value = currentProfileTitle.textContent;
   subtitleField.value = currentProfileSubtitle.textContent;
   
-  // добавить обработчики закрытия и отправки формы
-  editForm.addEventListener('submit', submitEditForm);
-
   openPopup(editPopup);
 }
 
@@ -140,7 +149,7 @@ const renderCard = (place, link) => {
   // записать атрибуты и заголовок в новую карточку
   cardPhoto.setAttribute('alt', 'На фото: ' + place);
   cardPhoto.setAttribute('src', link);
-  cardItem.querySelector('.card__title').textContent = place;  
+  cardItem.querySelector('.card__title').textContent = place;
 
   // установить кнопку лайка
   cardItem.querySelector('.card__like-button').addEventListener('click', function (evt) {
@@ -149,7 +158,7 @@ const renderCard = (place, link) => {
 
   // установить кнопку удаления
   cardItem.querySelector('.card__delete-button').addEventListener('click', function (evt) {
-    evt.target.parentNode.remove(); 
+    evt.target.parentNode.remove();
   });
   
   // задать переход в окно просмотра
@@ -161,28 +170,45 @@ const renderCard = (place, link) => {
     togglePhotoViewer(currentPhotoLink, currentPhotoTitle, currentPhotoAlt);
   });
 
-  contentSection.prepend(cardItem);
+  return cardItem;
 }
 
+const postNewCard = (cardItem) => {
+  contentSection.append(cardItem);
+}
+
+const loadDefaultCards = (initialCardsList) => {
+  initialCardsList.forEach((initialCardObj) => {
+    postNewCard(renderCard(initialCardObj.name, initialCardObj.link));
+  });
+}
+
+
 // добавить новую карточку
-const submitAddForm = (evt) => {
+const submitAddForm = () => {
   // передать значения полей в функцию для построения карточки
   const newPlace = newPlaceField.value;
   const newLink = newLinkField.value;
-  renderCard(newPlace, newLink);
 
+  postNewCard(renderCard(newPlace, newLink));
   closePopup(addPopup);
-  
-  newPlaceField.value = '';
-  newLinkField.value = '';
 }
 
 // вызвать окно добавления места
 const toggleAddPopup = () => {
-  // добавить обработчик отправки формы
-  addForm.addEventListener('submit', submitAddForm);
+  resetAllErrors(addForm);
+
+  newPlaceField.value = '';
+  newLinkField.value = '';
+
   openPopup(addPopup);
 }
+
+// обработчик закрытия и отправки формы
+editForm.addEventListener('submit', submitEditForm);
+
+// обработчик отправки формы
+addForm.addEventListener('submit', submitAddForm);
 
 // обработчики формы редактирования профиля
 editButton.addEventListener('click', toggleEditPopup);
@@ -191,4 +217,7 @@ editButton.addEventListener('click', toggleEditPopup);
 addButton.addEventListener('click', toggleAddPopup);
 
 // прогрузить начальные карточки
-initialCards.forEach(defaultCard => renderCard(defaultCard.name, defaultCard.link));
+loadDefaultCards(initialCards);
+
+// добавить обработчики закрытия попапов
+addPopupCloseHandlers();
