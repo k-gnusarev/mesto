@@ -68,7 +68,6 @@ const addPopupCloseHandlers = () => {
         closePopup(popupElement);
       }
     });
-    document.addEventListener('keydown', popupCloseByEsc);
   });
 }
 
@@ -95,11 +94,12 @@ const resetAllErrors = (form) => {
 
 const closePopup = (target) => {
   target.classList.remove('popup_active');
-  target.removeEventListener('keydown', popupCloseByEsc);
+  document.removeEventListener('keydown', popupCloseByEsc);
 }
 
 const openPopup = (target) => {
   target.classList.add('popup_active');
+  document.addEventListener('keydown', popupCloseByEsc);
 }
 
 const popupCloseByEsc = (evt) => {
@@ -174,12 +174,12 @@ const renderCard = (place, link) => {
 }
 
 const postNewCard = (cardItem) => {
-  contentSection.append(cardItem);
+  contentSection.prepend(cardItem);
 }
 
 const loadDefaultCards = (initialCardsList) => {
   initialCardsList.forEach((initialCardObj) => {
-    postNewCard(renderCard(initialCardObj.name, initialCardObj.link));
+    contentSection.append(renderCard(initialCardObj.name, initialCardObj.link));
   });
 }
 
