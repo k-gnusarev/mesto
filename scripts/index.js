@@ -1,3 +1,5 @@
+import { Card } from './Card.js';
+
 // ссылки на элементы формы редактирования профиля
 const editButton = document.querySelector('.profile__edit-button');
 const editPopup = document.querySelector('.popup_type_edit');
@@ -19,9 +21,6 @@ const popupPhoto = viewerPopup.querySelector('.popup__photo');
 // ссылки для текущих имени и описания профиля
 const currentProfileTitle = document.querySelector('.profile__title');
 const currentProfileSubtitle = document.querySelector('.profile__subtitle');
-
-// ссылки на элементы карточки
-const likeButton = document.querySelector('.card__like-button');
 
 // прочие глобальные ссылки
 const contentSection = document.querySelector('.content');
@@ -131,6 +130,7 @@ const submitEditForm = () => {
 // вызвать окно редактирования профиля
 const toggleEditPopup = () => {
   resetAllErrors(editForm);
+
   // вписать в поля текущие значения имени и описания
   titleField.value = currentProfileTitle.textContent;
   subtitleField.value = currentProfileSubtitle.textContent;
@@ -140,35 +140,9 @@ const toggleEditPopup = () => {
 
 // разместить новую карточку
 
-const renderCard = (place, link) => {
-  // склонировать шаблон новой карточки
-  const cardTemplate = document.querySelector('.card-template').content;
-  const cardItem = cardTemplate.cloneNode(true);
-  const cardPhoto = cardItem.querySelector('.card__photo');
-
-  // записать атрибуты и заголовок в новую карточку
-  cardPhoto.setAttribute('alt', 'На фото: ' + place);
-  cardPhoto.setAttribute('src', link);
-  cardItem.querySelector('.card__title').textContent = place;
-
-  // установить кнопку лайка
-  cardItem.querySelector('.card__like-button').addEventListener('click', function (evt) {
-    evt.target.classList.toggle('card__like-button_active');
-  });
-
-  // установить кнопку удаления
-  cardItem.querySelector('.card__delete-button').addEventListener('click', function (evt) {
-    evt.target.parentNode.remove();
-  });
-  
-  // задать переход в окно просмотра
-  cardPhoto.addEventListener('click', function (evt) {
-    const currentPhotoLink = evt.target.getAttribute('src');
-    const currentPhotoTitle = place;
-    const currentPhotoAlt = evt.target.getAttribute('alt');
-
-    togglePhotoViewer(currentPhotoLink, currentPhotoTitle, currentPhotoAlt);
-  });
+const renderCard = (cardObj) => {
+  const card = new Card(cardObj, '.card-template', togglePhotoViewer);
+  const cardItem = card.generateCard();
 
   return cardItem;
 }
@@ -179,10 +153,9 @@ const postNewCard = (cardItem) => {
 
 const loadDefaultCards = (initialCardsList) => {
   initialCardsList.forEach((initialCardObj) => {
-    contentSection.append(renderCard(initialCardObj.name, initialCardObj.link));
+    postNewCard(renderCard(initialCardObj));
   });
 }
-
 
 // добавить новую карточку
 const submitAddForm = () => {
@@ -190,7 +163,7 @@ const submitAddForm = () => {
   const newPlace = newPlaceField.value;
   const newLink = newLinkField.value;
 
-  postNewCard(renderCard(newPlace, newLink));
+  postNewCard(renderCard({ name: newPlace, link: newLink }));
   closePopup(addPopup);
 }
 
@@ -221,3 +194,5 @@ loadDefaultCards(initialCards);
 
 // добавить обработчики закрытия попапов
 addPopupCloseHandlers();
+
+export { togglePhotoViewer, addForm, editForm }
