@@ -4,7 +4,7 @@
   box-sizing: border-box;
   border: none;
   
-  background-size: contain;  
+  background-size: contain;
   background-image: url(../../../images/like-button.svg);
   background-color: transparent;
 }
