@@ -1,4 +1,6 @@
 import { Card } from './Card.js';
+import { FormValidator } from './FormValidator.js';
+import { config, initialCards } from './data.js'
 
 // ссылки на элементы формы редактирования профиля
 const editButton = document.querySelector('.profile__edit-button');
@@ -25,35 +27,6 @@ const currentProfileSubtitle = document.querySelector('.profile__subtitle');
 // прочие глобальные ссылки
 const contentSection = document.querySelector('.content');
 
-// изначальные карточки
-
-const initialCards = [
-  {
-    name: 'Семук-Чампей',
-    link: 'https://images.unsplash.com/photo-1525454240972-e37288888ff0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80',
-  },
-  {
-    name: 'Антигуа-Гватемала',
-    link: 'https://images.unsplash.com/photo-1563442744-3e17a3bf4932?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjE0MjB9&auto=format&fit=crop&w=1950&q=80',
-  },
-  {
-    name: 'Вулкан Фуэго',
-    link: 'https://images.unsplash.com/photo-1506467493604-25d7861a6703?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1934&q=80',
-  },
-  {
-    name: 'Тикаль',
-    link: 'https://images.unsplash.com/photo-1508035460735-91088c495500?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80',
-  },
-  {
-    name: 'Озеро Атитлан',
-    link: 'https://images.unsplash.com/photo-1528543010705-e7e75169b717?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1934&q=80',
-  },
-  {
-    name: 'Остров Флорес',
-    link: 'https://images.unsplash.com/photo-1544527232-c8738c8cb2cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80',
-  }
-];
-
 // добавить обработчики закрытия попапов
 
 const addPopupCloseHandlers = () => {
@@ -70,38 +43,19 @@ const addPopupCloseHandlers = () => {
   });
 }
 
-// сброс сообщений об ошибках
-
-const resetAllErrors = (form) => {
-  const errorInputList = Array.from(form.querySelectorAll('.popup__input_state_error'));
-  const errorMessageList = Array.from(form.querySelectorAll('.popup__form-error_active'));
-
-  if (errorInputList.length > 0) {
-    errorInputList.forEach(errorInputItem => {
-      errorInputItem.classList.remove('popup__input_state_error');
-    });
-  };
-
-  if (errorMessageList.length > 0) {
-    errorMessageList.forEach(errorMessageItem => {
-      errorMessageItem.classList.remove('popup__form-error_active');
-    });
-  };
-}
-
 // выключатели попапа
 
 const closePopup = (target) => {
   target.classList.remove('popup_active');
-  document.removeEventListener('keydown', popupCloseByEsc);
+  document.removeEventListener('keydown', closePopupByEsc);
 }
 
 const openPopup = (target) => {
   target.classList.add('popup_active');
-  document.addEventListener('keydown', popupCloseByEsc);
+  document.addEventListener('keydown', closePopupByEsc);
 }
 
-const popupCloseByEsc = (evt) => {
+const closePopupByEsc = (evt) => {
   if (evt.key === 'Escape') {
     const activePopup = document.querySelector('.popup_active');
     closePopup(activePopup);
@@ -129,7 +83,7 @@ const submitEditForm = () => {
 
 // вызвать окно редактирования профиля
 const toggleEditPopup = () => {
-  resetAllErrors(editForm);
+  resetErrorMessages(editPopupValidator);
 
   // вписать в поля текущие значения имени и описания
   titleField.value = currentProfileTitle.textContent;
@@ -169,12 +123,17 @@ const submitAddForm = () => {
 
 // вызвать окно добавления места
 const toggleAddPopup = () => {
-  resetAllErrors(addForm);
+  const buttonElement = addForm.querySelector(config.submitButtonSelector);
 
-  newPlaceField.value = '';
-  newLinkField.value = '';
-
+  resetErrorMessages(addPopupValidator);
+  addForm.reset();
+  buttonElement.classList.add(config.inactiveButtonClass);
+  buttonElement.setAttribute('disabled', true);
   openPopup(addPopup);
+}
+
+const resetErrorMessages = (validator, form) => {
+  validator.resetAllErrors(form);
 }
 
 // обработчик закрытия и отправки формы
@@ -195,4 +154,8 @@ loadDefaultCards(initialCards);
 // добавить обработчики закрытия попапов
 addPopupCloseHandlers();
 
-export { togglePhotoViewer, addForm, editForm }
+const editPopupValidator = new FormValidator(config, editForm);
+editPopupValidator.enableValidation();
+
+const addPopupValidator = new FormValidator(config, addForm);
+addPopupValidator.enableValidation();
