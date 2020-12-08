@@ -18,8 +18,10 @@ export class Card {
 
   _setCardData() {
     // записать атрибуты и заголовок в новую карточку
-    this._element.querySelector('.card__photo').setAttribute('alt', 'На фото: ' + this._name);
-    this._element.querySelector('.card__photo').setAttribute('src', this._link);
+    const cardPhoto = this._element.querySelector('.card__photo');
+
+    cardPhoto.setAttribute('alt', 'На фото: ' + this._name);
+    cardPhoto.setAttribute('src', this._link);
     this._element.querySelector('.card__title').textContent = this._name;
   }
 
@@ -30,6 +32,7 @@ export class Card {
 
   _handleDeleteButton() {
     this._element.remove();
+    this._element = null;
   }
 
   _setEventListeners() {
