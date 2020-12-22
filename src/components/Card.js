@@ -18,8 +18,8 @@ export class Card {
 
   _setCardData() {
     // записать атрибуты и заголовок в новую карточку
-    this._cardElement.querySelector('.card__photo').setAttribute('alt', 'На фото: ' + this._name);
-    this._cardElement.querySelector('.card__photo').setAttribute('src', this._link);
+    this._cardImage.setAttribute('alt', 'На фото: ' + this._name);
+    this._cardImage.setAttribute('src', this._link);
     this._cardElement.querySelector('.card__title').textContent = this._name;
   }
 
@@ -35,7 +35,6 @@ export class Card {
   _setEventListeners() {
     this._likeButton = this._cardElement.querySelector('.card__like-button');
     this._deleteButton = this._cardElement.querySelector('.card__delete-button');
-    this._cardImage = this._cardElement.querySelector('.card__photo');
     
     this._likeButton.addEventListener('click', () => { this._handleLikeButton() });
     this._deleteButton.addEventListener('click', () => { this._handleDeleteButton() });
@@ -46,6 +45,7 @@ export class Card {
 
   generateCard() {
     this._cardElement = this._getTemplate();
+    this._cardImage = this._cardElement.querySelector('.card__photo');
     this._setCardData();
     this._setEventListeners();
 

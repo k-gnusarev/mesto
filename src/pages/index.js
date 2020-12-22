@@ -1,12 +1,13 @@
-import '../../pages/index.css';
+import './index.css';
 
 import { Card } from '../components/Card.js';
 import { PopupWithForm } from '../components/PopupWithForm.js';
 import { PopupWithImage } from '../components/PopupWithImage.js';
 import { Section } from '../components/Section.js';
 import { UserInfo } from '../components/UserInfo.js';
-import { editPopupValidator, addPopupValidator } from '../validate.js';
+import { FormValidator } from '../components/FormValidator.js';
 import {
+  config,
   initialCards,
   editButton,
   editPopup,
@@ -113,9 +114,18 @@ addButton.addEventListener('click', toggleAddPopup);
 
 newEditPopup.setEventListeners();
 newAddPopup.setEventListeners();
+imagePopup.setEventListeners();
 
 // прогрузить начальные карточки
 section.renderItems();
+
+// валидация
+
+const editPopupValidator = new FormValidator(config, editForm);
+editPopupValidator.enableValidation();
+
+const addPopupValidator = new FormValidator(config, addForm);
+addPopupValidator.enableValidation();
 
 // добавить обработчики закрытия попапов
 

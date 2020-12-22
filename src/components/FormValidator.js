@@ -1,10 +1,11 @@
 export class FormValidator {
-  constructor (config, form) {
+  constructor(config, form) {
     this._config = config;
     this._form = form;
+    this._button = this._form.querySelector(this._config.submitButtonSelector);
   }
 
-  _isInputInvalid = (inputList) => {  
+  _isInputInvalid = (inputList) => {
     return inputList.some((inputElement) => !inputElement.validity.valid);
   }
 
@@ -28,39 +29,35 @@ export class FormValidator {
     errorMessageElement.classList.remove(errorClass);
   };
 
-  _checkInputValidity(popupElement, inputElement, errorClass, inputErrorClass) {
+  _checkInputValidity(form, inputElement, errorClass) {
     const inputIsInvalid = !inputElement.validity.valid;
-    const errorMessageElement = popupElement.querySelector(`#${inputElement.id}-error`);
-    
+    const errorMessageElement = form.querySelector(`#${inputElement.id}-error`);
+
     if (inputIsInvalid) {
       const errorMessageText = inputElement.validationMessage;
       this._setErrorMessage(errorMessageElement, errorMessageText, errorClass);
-      inputElement.classList.add(inputErrorClass);
     } else {
       this._hideErrorMessage(errorMessageElement, errorClass);
-      inputElement.classList.remove(inputErrorClass);
     };
   };
 
-  _setEventListeners(config, popupElement) {
-    const inputList = Array.from(popupElement.querySelectorAll(config.inputSelector));
-    const buttonElement = popupElement.querySelector(config.submitButtonSelector);
-  
+  _setEventListeners(config, form) {
+    const inputList = Array.from(form.querySelectorAll(config.inputSelector));
+
     inputList.forEach(inputElement => {
       inputElement.addEventListener('input', () => {
-        this._checkInputValidity(popupElement, inputElement, config.errorClass, config.inputErrorClass);
-        this._toggleSubmitButton(inputList, buttonElement, config.inactiveButtonClass);
+        this._checkInputValidity(form, inputElement, config.errorClass, config.inputErrorClass);
+        this._toggleSubmitButton(inputList, this._button, config.inactiveButtonClass);
       });
     });
     // отключаем кнопку при вызове модального окна
-    this._toggleSubmitButton(inputList, buttonElement, config.inactiveButtonClass);
+    this._toggleSubmitButton(inputList, this._button, config.inactiveButtonClass);
   };
 
   resetAllErrors() {
     // сброс ошибки и состояния кнопки сабмита
     const errorInputList = Array.from(this._form.querySelectorAll('.popup__input_state_error'));
     const errorMessageList = Array.from(this._form.querySelectorAll('.popup__form-error_active'));
-    const buttonElement = this._form.querySelector(this._config.submitButtonSelector);
 
     if (errorInputList.length > 0) {
       errorInputList.forEach(errorInputItem => {
@@ -74,17 +71,11 @@ export class FormValidator {
       });
     };
 
-    buttonElement.classList.add(this._config.inactiveButtonClass);
-    buttonElement.setAttribute('disabled', true);
+    this._button.classList.add(this._config.inactiveButtonClass);
+    this._button.setAttribute('disabled', true);
   }
 
   enableValidation() {
-    // отменить стандартную отправку форм
-    const formList = Array.from(document.querySelectorAll(this._config.formSelector));
-
-    formList.forEach(popupElement => {
-      // передать формы для навешивания обработчиков на ввод
-      this._setEventListeners(this._config, popupElement);
-    });
+    this._setEventListeners(this._config, this._form);
   };
 }
