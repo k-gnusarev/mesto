@@ -2,17 +2,16 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">  
-  <link rel="stylesheet" href="pages/index.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mesto</title>
 </head>
 <body class="page">
   <header class="header">
-    <img src="./images/logo.svg" class="logo" alt="Логотип Mesto Russia">
+    <img src="<%=require('./images/logo.svg')%>" class="logo" alt="Логотип Mesto Russia">
   </header>
   <main class="main">
     <section class="profile">
-      <img src="./images/Юрий_Кнорозов.jpg" alt="Аватар пользователя Юрий Кнорозов" class="profile__avatar">
+      <img src="<%=require('./images/Юрий_Кнорозов.jpg')%>" alt="Аватар пользователя Юрий Кнорозов" class="profile__avatar">
       <div class="profile__description">
         <div class="profile__title-container">
           <h1 class="profile__title">Юрий Кнорозов</h1>
@@ -97,13 +96,13 @@
     <div class="popup__photo-container">
       <button type="button" class="button popup__close-button"></button>
       <!-- здесь и далее - обязательные атрибуты alt и src добавляются посредством скрипта -->
-      <img class="popup__photo" alt="alt" src="#">
+      <img class="popup__photo" alt="#" src="#">
       <p class="popup__photo-title"></p>          
     </div>
   </div>
   <template class="card-template">
     <div class="card">
-      <img class="card__photo" alt="alt" src="#">
+      <img class="card__photo" alt="#" src="#">
       <div class="card__menu">
         <h2 class="card__title"></h2>
         <button type="button" class="button card__like-button"></button>
@@ -112,6 +111,5 @@
     </div>
   </template>
 
-  <script type="module" src="./scripts/index.js"></script>
 </body>
 </html>
