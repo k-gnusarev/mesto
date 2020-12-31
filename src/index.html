@@ -11,7 +11,11 @@
   </header>
   <main class="main">
     <section class="profile">
-      <img src="<%=require('./images/Юрий_Кнорозов.jpg')%>" alt="Аватар пользователя Юрий Кнорозов" class="profile__avatar">
+      <div class="profile__avatar-section">
+        <img src="<%=require('./images/Юрий_Кнорозов.jpg')%>" alt="Аватар пользователя Юрий Кнорозов" class="profile__avatar">
+        <!-- <button type="button" class="button profile__avatar-button"></button> -->
+        <img src="<%=require('./images/Edit-Avatar-Icon.svg')%>" alt="Поставить другой аватар" class="profile__avatar-button">
+      </div>
       <div class="profile__description">
         <div class="profile__title-container">
           <h1 class="profile__title">почему</h1>
@@ -91,7 +95,26 @@
         <button type="submit" class="button popup__submit-button">Сохранить</button>
       </form>
     </div>
-  </div>   
+  </div>
+  <div class="popup popup_type_update-avatar">
+    <div class="popup__container">
+      <button type="button" class="button popup__close-button"></button>
+      <h3 class="popup__title">Обновить аватар</h3>
+      <form name="update-avatar" class="popup__form popup__form_type_update-avatar" novalidate>
+        <section class="popup__section">
+          <input
+            type="url"
+            name="avatarLink"
+            class="popup__input"
+            id="avatar-url"
+            placeholder="Ссылка на аватар"
+            required>
+          <span class="popup__form-error" id="update-avatar-error"></span>
+        </section>        
+        <button type="submit" class="button popup__submit-button">Сохранить</button>
+      </form>
+    </div>
+  </div>
   <div class="popup popup_type_viewer">
     <div class="popup__photo-container">
       <button type="button" class="button popup__close-button"></button>
@@ -100,16 +123,25 @@
       <p class="popup__photo-title"></p>          
     </div>
   </div>
+  <div class="popup popup_type_delete">
+    <div class="popup__container">
+      <button type="button" class="button popup__close-button"></button>
+      <h3 class="popup__title">Вы уверены?</h3>
+      <button type="submit" class="button popup__submit-button">Да</button>
+    </div>
+  </div>
   <template class="card-template">
     <div class="card">
       <img class="card__photo" alt="#" src="#">
       <div class="card__menu">
         <h2 class="card__title"></h2>
-        <button type="button" class="button card__like-button"></button>
+        <div class="card__like-container">
+          <button type="button" class="button card__like-button"></button>
+          <p class="card__like-counter">0</p>
+        </div>
       </div>
       <button class="button card__delete-button"></button>
     </div>
-  </template>
-
+  </template>  
 </body>
 </html>

@@ -1,5 +1,6 @@
 .popup__submit-button {  
   height: 50px;
+  width: 100%;
 
   font-size: 18px;
   line-height: 1.22;
