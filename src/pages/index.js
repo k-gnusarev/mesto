@@ -6,6 +6,7 @@ import { PopupWithImage } from '../components/PopupWithImage.js';
 import { Section } from '../components/Section.js';
 import { UserInfo } from '../components/UserInfo.js';
 import { FormValidator } from '../components/FormValidator.js';
+import { Api } from '../components/Api.js';
 import {
   config,
   initialCards,
@@ -21,8 +22,19 @@ import {
   newLinkField,
   viewerPopup,
   currentProfileTitle,
-  currentProfileSubtitle
+  currentProfileSubtitle,
+  currentAvatar
 } from '../utils/constants.js';
+
+// инициализировать API
+
+const api = new Api({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-19',
+  headers: {
+    authorization: 'deb0aa6f-32ec-48b3-9746-6ea746dde45e',
+    'Content-Type': 'application/json'
+  }
+});
 
 // создание экземпляров модальных окон
 
@@ -126,6 +138,15 @@ editPopupValidator.enableValidation();
 
 const addPopupValidator = new FormValidator(config, addForm);
 addPopupValidator.enableValidation();
+
+// получить данные пользователя с сервера
+
+api.getUserData().then(userData => {
+  currentAvatar.src = userData.avatar;
+  currentProfileTitle.textContent = userData.name;
+  currentProfileSubtitle.textContent = userData.about;  
+});
+
 
 // добавить обработчики закрытия попапов
 

@@ -52,9 +52,10 @@ const newLinkField = addPopup.querySelector('input[name="placeLink"]');
 const viewerPopup = document.querySelector('.popup_type_viewer');
 const popupPhoto = viewerPopup.querySelector('.popup__photo');
 
-// ссылки для текущих имени и описания профиля
+// ссылки для текущих данных профиля
 const currentProfileTitle = document.querySelector('.profile__title');
 const currentProfileSubtitle = document.querySelector('.profile__subtitle');
+const currentAvatar = document.querySelector('.profile__avatar');
 
 // прочие глобальные ссылки
 const contentSection = document.querySelector('.content');
@@ -76,5 +77,6 @@ export {
   popupPhoto,
   currentProfileTitle,
   currentProfileSubtitle,
-  contentSection
+  contentSection,
+  currentAvatar
 }
