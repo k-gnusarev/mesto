@@ -2,6 +2,7 @@ export class Card {
   constructor ({ cardData, handleCardClick }, templateSelector) {
     this._name = cardData.name;
     this._link = cardData.link;
+    this._likeCount = cardData.likes.length;
     this._cardSelector = templateSelector;
     this._handleCardClick = handleCardClick;
   }
@@ -21,6 +22,7 @@ export class Card {
     this._cardImage.setAttribute('alt', 'На фото: ' + this._name);
     this._cardImage.setAttribute('src', this._link);
     this._cardElement.querySelector('.card__title').textContent = this._name;
+    this._cardElement.querySelector('.card__like-counter').textContent = this._likeCount;
   }
 
 

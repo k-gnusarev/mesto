@@ -36,6 +36,15 @@ const api = new Api({
   }
 });
 
+// получить данные пользователя с сервера
+
+api.getUserData()
+  .then(userData => {
+    currentAvatar.src = userData.avatar;
+    currentProfileTitle.textContent = userData.name;
+    currentProfileSubtitle.textContent = userData.about;  
+  });
+
 // создание экземпляров модальных окон
 
 const imagePopup = new PopupWithImage(viewerPopup);
@@ -164,14 +173,5 @@ editPopupValidator.enableValidation();
 
 const addPopupValidator = new FormValidator(config, addForm);
 addPopupValidator.enableValidation();
-
-// получить данные пользователя с сервера
-
-api.getUserData()
-  .then(userData => {
-    currentAvatar.src = userData.avatar;
-    currentProfileTitle.textContent = userData.name;
-    currentProfileSubtitle.textContent = userData.about;  
-  });
 
 export { addForm, editForm }
