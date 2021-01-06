@@ -74,24 +74,6 @@ const newAddPopup = new PopupWithForm({
   }
 });
 
-// отрисовка карточек на странице
-
-const section = new Section(
-  {
-    items: initialCards,
-    renderer: (item) => {
-      const card = new Card({
-        cardData: item,
-        handleCardClick: () => {
-          imagePopup.open(item.link, item.name);
-        }
-      },
-      '.card-template');
-      section.addItem(card.generateCard());
-    }
-  },
-  '.content');
-
 // инфо о пользователе
 
 const userInfo = new UserInfo({
@@ -124,12 +106,39 @@ editButton.addEventListener('click', toggleEditPopup);
 // вызов формы добавления карточки
 addButton.addEventListener('click', toggleAddPopup);
 
+// добавить слушатели событий
+
 newEditPopup.setEventListeners();
 newAddPopup.setEventListeners();
 imagePopup.setEventListeners();
 
-// прогрузить начальные карточки
-section.renderItems();
+// ПРОГРУЗИТЬ НАЧАЛЬНЫЕ КАРТОЧКИ
+// 1. получаем карточки с сервера
+api.getInitialCards()
+  .then(serverCards => {
+    renderInitialCards(serverCards);    
+  });
+
+// 2. отрисовываем их
+
+const renderInitialCards = serverCards => {
+  const section = new Section(
+    {
+      items: serverCards,
+      renderer: (item) => {
+        const card = new Card({
+          cardData: item,
+          handleCardClick: () => {
+            imagePopup.open(item.link, item.name);
+          }
+        },
+        '.card-template');
+        serverCardList.addItem(card.generateCard());
+      }
+    },
+    '.content');
+    section.renderItems();
+}
 
 // валидация
 
@@ -141,13 +150,11 @@ addPopupValidator.enableValidation();
 
 // получить данные пользователя с сервера
 
-api.getUserData().then(userData => {
-  currentAvatar.src = userData.avatar;
-  currentProfileTitle.textContent = userData.name;
-  currentProfileSubtitle.textContent = userData.about;  
-});
-
-
-// добавить обработчики закрытия попапов
+api.getUserData()
+  .then(userData => {
+    currentAvatar.src = userData.avatar;
+    currentProfileTitle.textContent = userData.name;
+    currentProfileSubtitle.textContent = userData.about;  
+  });
 
 export { addForm, editForm }

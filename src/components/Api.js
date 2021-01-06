@@ -10,4 +10,11 @@ export class Api {
         return res.json();
       });
   }
+
+  getInitialCards() {
+    return fetch(`${this._baseUrl}/cards`, { headers: this._headers })
+    .then(res => {
+      return res.json();
+    });
+  }
 }
