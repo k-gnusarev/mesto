@@ -40,16 +40,24 @@ const api = new Api({
 
 const imagePopup = new PopupWithImage(viewerPopup);
 
-const newEditPopup = new PopupWithForm({
-  popupElement: editPopup,
-  submitHandler: () => {
-    userInfo.setUserInfo({
-      title: titleField.value,
-      subtitle: subtitleField.value
+const handleProfileEditSubmit = () => {
+  const updatedInfo = {
+    name: titleField.value,
+    about: subtitleField.value
+  }
+
+  api.updateUserInfo(updatedInfo.name, updatedInfo.about)
+    .then(updatedInfo => {
+      userInfo.setUserInfo(updatedInfo);
+      console.log(updatedInfo);
     });
 
-    newEditPopup.close();
-  }
+  newEditPopup.close();
+}
+
+const newEditPopup = new PopupWithForm({
+  popupElement: editPopup,
+  submitHandler: handleProfileEditSubmit
 });
 
 const newAddPopup = new PopupWithForm({
@@ -85,8 +93,8 @@ const userInfo = new UserInfo({
 const toggleEditPopup = () => {
   const currentUserInfo = userInfo.getUserInfo();
 
-  titleField.value = currentUserInfo.title;
-  subtitleField.value = currentUserInfo.subtitle;
+  titleField.value = currentUserInfo.name;
+  subtitleField.value = currentUserInfo.about;
 
   editPopupValidator.resetAllErrors();
   

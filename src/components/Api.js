@@ -17,4 +17,18 @@ export class Api {
       return res.json();
     });
   }
+
+  updateUserInfo(title, subtitle) {
+    return fetch(`${this._baseUrl}/users/me`, { 
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: title,
+        about: subtitle
+      })
+    })
+      .then(res => {
+        return res.json();
+      })
+  }
 }
