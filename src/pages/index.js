@@ -9,7 +9,6 @@ import { FormValidator } from '../components/FormValidator.js';
 import { Api } from '../components/Api.js';
 import {
   config,
-  initialCards,
   editButton,
   editPopup,
   editForm,
@@ -23,10 +22,11 @@ import {
   viewerPopup,
   currentProfileTitle,
   currentProfileSubtitle,
+  contentSection,
   currentAvatar
 } from '../utils/constants.js';
 
-// инициализировать API
+// инициализация API
 
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-19',
@@ -40,6 +40,8 @@ const api = new Api({
 
 const imagePopup = new PopupWithImage(viewerPopup);
 
+// обработчик отправки формы обновления профиля
+
 const handleProfileEditSubmit = () => {
   const updatedInfo = {
     name: titleField.value,
@@ -49,37 +51,44 @@ const handleProfileEditSubmit = () => {
   api.updateUserInfo(updatedInfo.name, updatedInfo.about)
     .then(updatedInfo => {
       userInfo.setUserInfo(updatedInfo);
-      console.log(updatedInfo);
     });
 
   newEditPopup.close();
 }
+
+// создание экземпляра формы обновления профиля
 
 const newEditPopup = new PopupWithForm({
   popupElement: editPopup,
   submitHandler: handleProfileEditSubmit
 });
 
+const handleCardAddSubmit = () => {
+  const cardObj = {
+    name: newPlaceField.value,
+    link: newLinkField.value
+  }
+
+
+  api.sendNewCard(cardObj.link, cardObj.name)
+    .then(() => {    
+      const card = new Card({
+        cardData: cardObj,
+        handleCardClick: () => {
+          imagePopup.open(cardObj.name, cardObj.link);
+        }
+      },
+      '.card-template');
+
+      contentSection.prepend(card.generateCard());
+    });
+
+  newAddPopup.close();
+}
+
 const newAddPopup = new PopupWithForm({
   popupElement: addPopup,
-  submitHandler: () => {
-    const cardObj = {
-      name: newPlaceField.value,
-      link: newLinkField.value
-    }
-
-    const card = new Card({
-      cardData: cardObj,
-      handleCardClick: () => {
-        imagePopup.open(cardObj.link, cardObj.name);
-      }
-    },
-    '.card-template');
-
-    section.addItem(card.generateCard());
-  
-    newAddPopup.close();
-  }
+  submitHandler: handleCardAddSubmit
 });
 
 // инфо о пользователе
