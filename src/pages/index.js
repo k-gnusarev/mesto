@@ -133,7 +133,7 @@ const renderInitialCards = serverCards => {
           }
         },
         '.card-template');
-        serverCardList.addItem(card.generateCard());
+        section.addItem(card.generateCard());
       }
     },
     '.content');
