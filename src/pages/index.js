@@ -23,10 +23,13 @@ import {
   currentProfileTitle,
   currentProfileSubtitle,
   contentSection,
-  currentAvatar
+  currentAvatar,
+  deletePopup,
+  currentUserId
 } from '../utils/constants.js';
+import { PopupConfirm } from '../components/PopupConfirm';
 
-// инициализация API
+// ИНИЦИАЛИЗАЦИЯ API
 
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-19',
@@ -36,7 +39,7 @@ const api = new Api({
   }
 });
 
-// получить данные пользователя с сервера
+// ПОЛУЧЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ С СЕРВЕРА
 
 api.getUserData()
   .then(userData => {
@@ -45,10 +48,19 @@ api.getUserData()
     currentProfileSubtitle.textContent = userData.about;  
   });
 
-// создание экземпляров модальных окон
+// создание экземпляра информации о пользователе
+
+const userInfo = new UserInfo({
+  titleElement: currentProfileTitle,
+  subtitleElement: currentProfileSubtitle
+});
+
+// СОЗДАНИЕ ЭКЗЕМПЛЯРОВ МОДАЛЬНЫХ ОКОН
+// 1. Окно просмотра фото
 
 const imagePopup = new PopupWithImage(viewerPopup);
 
+// 2. Окно формы обновления профиля
 // обработчик отправки формы обновления профиля
 
 const handleProfileEditSubmit = () => {
@@ -72,42 +84,7 @@ const newEditPopup = new PopupWithForm({
   submitHandler: handleProfileEditSubmit
 });
 
-const handleCardAddSubmit = () => {
-  const cardObj = {
-    name: newPlaceField.value,
-    link: newLinkField.value
-  }
-
-
-  api.sendNewCard(cardObj.link, cardObj.name)
-    .then(() => {    
-      const card = new Card({
-        cardData: cardObj,
-        handleCardClick: () => {
-          imagePopup.open(cardObj.name, cardObj.link);
-        }
-      },
-      '.card-template');
-
-      contentSection.prepend(card.generateCard());
-    });
-
-  newAddPopup.close();
-}
-
-const newAddPopup = new PopupWithForm({
-  popupElement: addPopup,
-  submitHandler: handleCardAddSubmit
-});
-
-// инфо о пользователе
-
-const userInfo = new UserInfo({
-  titleElement: currentProfileTitle,
-  subtitleElement: currentProfileSubtitle
-});
-
-// вызвать окно редактирования профиля
+// вызов окна редактирования профиля
 const toggleEditPopup = () => {
   const currentUserInfo = userInfo.getUserInfo();
 
@@ -119,24 +96,71 @@ const toggleEditPopup = () => {
   newEditPopup.open();
 }
 
-// вызвать окно добавления места
+// 3. Окно добавления новой карточки
+// обработчик отправки формы добавления карточки
+
+const handleCardAddSubmit = () => {
+  const cardObj = {
+    name: newPlaceField.value,
+    link: newLinkField.value,
+    likes: []
+  }
+
+
+  api.sendNewCard(cardObj.link, cardObj.name)
+    .then(() => {    
+      const card = new Card({
+        cardData: cardObj,
+        handleCardClick: () => {
+          imagePopup.open(cardObj.link, cardObj.name);
+        },
+        handleCardDelete: () => {
+          deletePopup.open(card);
+        },
+        userId: currentUserId
+      },
+      '.card-template');
+
+      contentSection.prepend(card.generateCard());
+    });
+
+  newAddPopup.close();
+}
+
+// создание экземпляра формы добавления карточки
+
+const newAddPopup = new PopupWithForm({
+  popupElement: addPopup,
+  submitHandler: handleCardAddSubmit
+});
+
+
+// вызов окна добавления карточки
 const toggleAddPopup = () => {
   addForm.reset();
   addPopupValidator.resetAllErrors();
   newAddPopup.open();
 }
 
-// вызов формы редактирования профиля
-editButton.addEventListener('click', toggleEditPopup);
+// 4. Подтверждение удаления карточки
+// обработчик нажатия кнопки подтверждения
 
-// вызов формы добавления карточки
-addButton.addEventListener('click', toggleAddPopup);
+const handleDeleteConfirmation = (evt, cardElement) => {
+  evt.preventDefault();
 
-// добавить слушатели событий
+  api.deleteCard(cardElement.getCardId())
+    .then(() => {
+      cardElement.deleteCard();
+      newDeletePopup.close();
+    })
+}
 
-newEditPopup.setEventListeners();
-newAddPopup.setEventListeners();
-imagePopup.setEventListeners();
+// создание экземпляра подтверждения удаления
+
+const newDeletePopup = new PopupConfirm({
+  popupElement: deletePopup,
+  submitHandler: handleDeleteConfirmation
+});
 
 // ПРОГРУЗИТЬ НАЧАЛЬНЫЕ КАРТОЧКИ
 // 1. получаем карточки с сервера
@@ -151,12 +175,16 @@ const renderInitialCards = serverCards => {
   const section = new Section(
     {
       items: serverCards,
-      renderer: (item) => {
+      renderer: item => {
         const card = new Card({
           cardData: item,
           handleCardClick: () => {
             imagePopup.open(item.link, item.name);
-          }
+          },
+          handleCardDelete: () => {
+            newDeletePopup.open(card);
+          },
+          userId: currentUserId
         },
         '.card-template');
         section.addItem(card.generateCard());
@@ -166,7 +194,21 @@ const renderInitialCards = serverCards => {
     section.renderItems();
 }
 
-// валидация
+// ДОБАВЛЕНИЕ СЛУШАТЕЛЕЙ СОБЫТИЙ
+
+// вызов формы редактирования профиля
+editButton.addEventListener('click', toggleEditPopup);
+
+// вызов формы добавления карточки
+addButton.addEventListener('click', toggleAddPopup);
+
+// модальные окна
+newEditPopup.setEventListeners();
+newAddPopup.setEventListeners();
+imagePopup.setEventListeners();
+newDeletePopup.setEventListeners();
+
+// ВАЛИДАЦИЯ
 
 const editPopupValidator = new FormValidator(config, editForm);
 editPopupValidator.enableValidation();

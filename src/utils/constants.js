@@ -25,6 +25,9 @@ const newLinkField = addPopup.querySelector('input[name="placeLink"]');
 const viewerPopup = document.querySelector('.popup_type_viewer');
 const popupPhoto = viewerPopup.querySelector('.popup__photo');
 
+// ссылки на элементы подтверждения удаления
+const deletePopup = document.querySelector('.popup_type_delete');
+
 // ссылки для текущих данных профиля
 const currentProfileTitle = document.querySelector('.profile__title');
 const currentProfileSubtitle = document.querySelector('.profile__subtitle');
@@ -32,6 +35,7 @@ const currentAvatar = document.querySelector('.profile__avatar');
 
 // прочие глобальные ссылки
 const contentSection = document.querySelector('.content');
+const currentUserId = '82c3226c62f91c52d5321c73';
 
 export {
   config,
@@ -50,5 +54,7 @@ export {
   currentProfileTitle,
   currentProfileSubtitle,
   contentSection,
-  currentAvatar
+  currentAvatar,
+  deletePopup,
+  currentUserId
 }

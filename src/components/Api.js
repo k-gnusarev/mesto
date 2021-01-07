@@ -45,4 +45,11 @@ export class Api {
         return res.json();
       })
   }
+
+  deleteCard(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: this._headers,
+    })
+  }
 }

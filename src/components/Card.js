@@ -1,10 +1,14 @@
 export class Card {
-  constructor ({ cardData, handleCardClick }, templateSelector) {
+  constructor ({ cardData, handleCardClick, handleCardDelete, userId }, templateSelector) {
     this._name = cardData.name;
     this._link = cardData.link;
     this._likeCount = cardData.likes.length;
-    this._cardSelector = templateSelector;
+    this._cardId = cardData._id;
+    this._ownerId = cardData.owner._id;
+    this._userId = userId;
     this._handleCardClick = handleCardClick;
+    this._handleCardDelete = handleCardDelete;
+    this._cardSelector = templateSelector;
   }
 
   _getTemplate() {
@@ -25,23 +29,14 @@ export class Card {
     this._cardElement.querySelector('.card__like-counter').textContent = this._likeCount;
   }
 
-
   _handleLikeButton() {    
     this._likeButton.classList.toggle('card__like-button_active');
   }
 
-  _handleDeleteButton() {
-    this._cardElement.remove();
-  }
-
   _setEventListeners() {
     this._likeButton = this._cardElement.querySelector('.card__like-button');
-    this._deleteButton = this._cardElement.querySelector('.card__delete-button');
-    
     this._likeButton.addEventListener('click', () => { this._handleLikeButton() });
-    this._deleteButton.addEventListener('click', () => { this._handleDeleteButton() });
-
-    // задать переход в окно просмотра
+    this._deleteButton.addEventListener('click', () => { this._handleCardDelete() });
     this._cardImage.addEventListener('click', () => { this._handleCardClick(this._cardElement) });
   }
 
@@ -49,8 +44,20 @@ export class Card {
     this._cardElement = this._getTemplate();
     this._cardImage = this._cardElement.querySelector('.card__photo');
     this._setCardData();
+    this._deleteButton = this._cardElement.querySelector('.card__delete-button');
+    if (this._ownerId !== this._userId) {
+      this._deleteButton.remove();
+    }
     this._setEventListeners();
 
     return this._cardElement;
+  }
+
+  getCardId() {
+    return this._cardId;
+  }
+
+  deleteCard() {
+    this._cardElement.remove();
   }
 }
