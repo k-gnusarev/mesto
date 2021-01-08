@@ -12,7 +12,7 @@
   <main class="main">
     <section class="profile">
       <div class="profile__avatar-section">
-        <img src="<%=require('./images/spy_icon-icons.com_55034.png')%>" alt="Аватар пользователя Юрий Кнорозов" class="profile__avatar">
+        <img src="<%=require('./images/spy_icon-icons.com_55034.png')%>" alt="Аватар пользователя" class="profile__avatar">
         <img src="<%=require('./images/Edit-Avatar-Icon.svg')%>" alt="Поставить другой аватар" class="profile__avatar-button">
       </div>
       <div class="profile__description">
@@ -108,7 +108,7 @@
             id="avatar-url"
             placeholder="Ссылка на аватар"
             required>
-          <span class="popup__form-error" id="update-avatar-error"></span>
+          <span class="popup__form-error" id="avatar-url-error"></span>
         </section>        
         <button type="submit" class="button popup__submit-button">Сохранить</button>
       </form>

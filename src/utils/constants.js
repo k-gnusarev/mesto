@@ -25,6 +25,12 @@ const newLinkField = addPopup.querySelector('input[name="placeLink"]');
 const viewerPopup = document.querySelector('.popup_type_viewer');
 const popupPhoto = viewerPopup.querySelector('.popup__photo');
 
+// ссфлки на элементы окна обновления аватара
+const updateAvatarButton = document.querySelector('.profile__avatar-button');
+const avatarPopup = document.querySelector('.popup_type_update-avatar');
+const avatarForm = document.querySelector('form[name="update-avatar"]');
+const avatarUrlField = document.querySelector('input[name="avatarLink"]');
+
 // ссылки на элементы подтверждения удаления
 const deletePopup = document.querySelector('.popup_type_delete');
 
@@ -56,5 +62,9 @@ export {
   contentSection,
   currentAvatar,
   deletePopup,
-  currentUserId
+  currentUserId,
+  avatarPopup,
+  updateAvatarButton,
+  avatarForm,
+  avatarUrlField
 }

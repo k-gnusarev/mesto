@@ -72,4 +72,17 @@ export class Api {
         return res.json();
       })
   }
+
+  updateAvatar(avatarLink) {
+    return fetch(`${this._baseUrl}/users/me/avatar`, { 
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: avatarLink
+      })
+    })
+      .then(res => {
+        return res.json();
+      })
+  }
 }

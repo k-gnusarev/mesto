@@ -1,10 +1,3 @@
-// TODO
-// 1. Обновление счётчика лайков при постановке лайка
-// 2. Окрашивание сердечка, если присутствует лайк от меня
-// 3. Запрос на снятие лайка через API
-// 4. Обновление счётчика лайков при снятии лайка
-// 5. Окрашивание сердечка в белый при отсутствии лайка от меня
-
 export class Card {
   constructor ({ cardData, handleCardClick, handleCardDelete, handleCardLike, userId }, templateSelector) {
     // данные карточки
@@ -34,14 +27,6 @@ export class Card {
       return cardItem;
   }
   
-  // найти лайки, оставленные пользователем
-
-  likedByUser() {
-    return this._cardData.likes.some(like => {
-      return like._id === this._userId;
-    })
-  }
-
   _toggleLikeButton() {
     if (this.likedByUser(this._userId)) {
       this._likeButton.classList.add('card__like-button_active');
@@ -50,10 +35,6 @@ export class Card {
     }
   }
 
-  setLikeCount(likes) {
-    this._cardElement.querySelector('.card__like-counter').textContent = likes;
-    this._toggleLikeButton(this._userId);
-  }
 
   _setCardData() {
     // записать атрибуты и заголовок в новую карточку
@@ -101,8 +82,20 @@ export class Card {
   }
 
   updateLikeCount(updatedLikes) {
-    console.log(updatedLikes.length);
     this._cardData.likes = updatedLikes;
     this.setLikeCount(updatedLikes.length);
+  }
+
+  // найти лайки, оставленные пользователем
+
+  likedByUser() {
+    return this._cardData.likes.some(like => {
+      return like._id === this._userId;
+    })
+  }
+  
+  setLikeCount(likes) {
+    this._cardElement.querySelector('.card__like-counter').textContent = likes;
+    this._toggleLikeButton(this._userId);
   }
 }

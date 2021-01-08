@@ -25,7 +25,11 @@ import {
   contentSection,
   currentAvatar,
   deletePopup,
-  currentUserId
+  currentUserId,
+  avatarPopup,
+  updateAvatarButton,
+  avatarForm,
+  avatarUrlField
 } from '../utils/constants.js';
 import { PopupConfirm } from '../components/PopupConfirm';
 
@@ -103,9 +107,7 @@ const handleCardAddSubmit = () => {
   const cardObj = {
     name: newPlaceField.value,
     link: newLinkField.value,
-    likes: []
   }
-
 
   api.sendNewCard(cardObj.link, cardObj.name)
     .then(item => {
@@ -163,6 +165,32 @@ const handleDeleteConfirmation = (evt, cardElement) => {
     })
 }
 
+// 5. Окно обновления аватара
+// обработчик отправки формы обновления аватара
+const handleAvatarUpdate = () => {
+  const newAvatarUrl = avatarUrlField.value;
+  api.updateAvatar(newAvatarUrl)
+    .then(userData => {
+      currentAvatar.src = userData.avatar;
+    });
+  newAvatarPopup.close();
+}
+
+
+// создание экземпляра окна обновления аватара
+const newAvatarPopup = new PopupWithForm({
+  popupElement: avatarPopup,
+  submitHandler: handleAvatarUpdate
+});
+
+// вызов окна редактирования аватара
+
+const toggleEditAvatarPopup = () => {
+  avatarForm.reset();
+  avatarPopupValidator.resetAllErrors();  
+  newAvatarPopup.open();
+}
+
 // создание экземпляра подтверждения удаления
 
 const newDeletePopup = new PopupConfirm({
@@ -218,11 +246,15 @@ editButton.addEventListener('click', toggleEditPopup);
 // вызов формы добавления карточки
 addButton.addEventListener('click', toggleAddPopup);
 
+// вызов формы обновления аватара
+updateAvatarButton.addEventListener('click', toggleEditAvatarPopup);
+
 // модальные окна
 newEditPopup.setEventListeners();
 newAddPopup.setEventListeners();
 imagePopup.setEventListeners();
 newDeletePopup.setEventListeners();
+newAvatarPopup.setEventListeners();
 
 // ВАЛИДАЦИЯ
 
@@ -231,5 +263,8 @@ editPopupValidator.enableValidation();
 
 const addPopupValidator = new FormValidator(config, addForm);
 addPopupValidator.enableValidation();
+
+const avatarPopupValidator = new FormValidator(config, avatarForm);
+avatarPopupValidator.enableValidation();
 
 export { addForm, editForm }
