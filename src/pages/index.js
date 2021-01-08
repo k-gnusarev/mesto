@@ -108,14 +108,22 @@ const handleCardAddSubmit = () => {
 
 
   api.sendNewCard(cardObj.link, cardObj.name)
-    .then(() => {    
+    .then(item => {
       const card = new Card({
-        cardData: cardObj,
+        cardData: item,
         handleCardClick: () => {
-          imagePopup.open(cardObj.link, cardObj.name);
+          imagePopup.open(item.link, item.name);
         },
         handleCardDelete: () => {
-          deletePopup.open(card);
+          newDeletePopup.open(card);
+        },
+        handleCardLike: () => {
+          const cardId = item._id;
+          const toggleLike = card.likedByUser() ? api.removeLike(cardId) : api.setLike(cardId);
+
+          toggleLike.then(item => {
+            card.updateLikeCount(item.likes);
+          })
         },
         userId: currentUserId
       },
@@ -183,6 +191,14 @@ const renderInitialCards = serverCards => {
           },
           handleCardDelete: () => {
             newDeletePopup.open(card);
+          },
+          handleCardLike: () => {
+            const cardId = item._id;
+            const toggleLike = card.likedByUser() ? api.removeLike(cardId) : api.setLike(cardId);
+
+            toggleLike.then(item => {
+              card.updateLikeCount(item.likes);
+            })
           },
           userId: currentUserId
         },
