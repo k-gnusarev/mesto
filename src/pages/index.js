@@ -167,7 +167,9 @@ const handleDeleteConfirmation = (evt, cardElement) => {
 
   api.deleteCard(cardElement.getCardId())
     .then(() => {
-      cardElement.deleteCard();
+      cardElement.deleteCard();  
+    })
+    .finally(() => {
       newDeletePopup.close();
     })
 }
@@ -175,13 +177,18 @@ const handleDeleteConfirmation = (evt, cardElement) => {
 // 5. Окно обновления аватара
 // обработчик отправки формы обновления аватара
 const handleAvatarUpdate = () => {
+  // взять введенное значение
   const newAvatarUrl = avatarUrlField.value;
+  // установить надпись ожидания на кнопке
   newAvatarPopup.setWaitCaption(waitCaption);
+  // отправить данные на сервер
   api.updateAvatar(newAvatarUrl)
     .then(userData => {
       currentAvatar.src = userData.avatar;
+    })
+    .finally(() => {
+      newAvatarPopup.close();
     });
-  newAvatarPopup.close();
 }
 
 
