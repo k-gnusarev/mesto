@@ -42,7 +42,6 @@ export class Card {
     this._cardImage.setAttribute('src', this._link);
     this._cardElement.querySelector('.card__title').textContent = this._name;
     this.setLikeCount(this._cardData.likes.length);
-    //this._cardElement.querySelector('.card__like-counter').textContent = this._likeCount;
   }
 
   _handleLikeButton() {    
@@ -50,24 +49,30 @@ export class Card {
   }
 
   _setEventListeners() {
-    
     this._likeButton.addEventListener('click', () => { this._handleCardLike() });
     this._deleteButton.addEventListener('click', () => { this._handleCardDelete() });
     this._cardImage.addEventListener('click', () => { this._handleCardClick(this._cardElement) });
   }
 
   generateCard() {
+    // взять шаблон
     this._cardElement = this._getTemplate();
 
+    // ссылки на элементы
     this._likeButton = this._cardElement.querySelector('.card__like-button');    
     this._cardImage = this._cardElement.querySelector('.card__photo');
     this._deleteButton = this._cardElement.querySelector('.card__delete-button');
 
+    // задать даныне карточки
     this._setCardData();    
+
+    // установить кнопку удаления в зависимости от пользователя
     this._ownerId = this._cardData.owner._id;
     if (this._ownerId !== this._userId) {
       this._deleteButton.remove();
     }
+
+    // установить обработчики событий
     this._setEventListeners();
 
     return this._cardElement;

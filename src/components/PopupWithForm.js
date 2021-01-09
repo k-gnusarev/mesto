@@ -1,5 +1,4 @@
 import { Popup } from './Popup.js';
-import { waitCaption } from '../utils/constants.js';
 
 export class PopupWithForm extends Popup {
   constructor ({ popupElement, submitHandler }) {
