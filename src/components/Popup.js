@@ -3,6 +3,7 @@ export class Popup {
     this._popupElement = popupElement;
     this._handleEscClose = this._handleEscClose.bind(this);
     this._closeButton = this._popupElement.querySelector('.popup__close-button');
+    this._submitButton = this._popupElement.querySelector('.popup__submit-button');
   }
 
   _handleEscClose(evt) {
@@ -10,7 +11,7 @@ export class Popup {
       this.close();
     }
   }
-
+  
   open() {
     this._popupElement.classList.add('popup_active');
 

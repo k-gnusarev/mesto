@@ -1,10 +1,12 @@
-import { Popup } from './Popup.js'
+import { Popup } from './Popup.js';
+import { waitCaption } from '../utils/constants.js';
 
 export class PopupWithForm extends Popup {
   constructor ({ popupElement, submitHandler }) {
     super(popupElement);
     this._submitHandler = submitHandler;
     this._form = this._popupElement.querySelector('.popup__form');
+    this._submitButton = this._form.querySelector('.popup__submit-button');
     this._inputList = Array.from(this._form.querySelectorAll('.popup__input'));
   }
 
@@ -16,6 +18,14 @@ export class PopupWithForm extends Popup {
     });
 
     return this._formValues;
+  }
+
+  resetWaitCaption() {
+    this._submitButton.textContent = 'Сохранить';
+  }
+
+  setWaitCaption(waitingCaption) {
+    this._submitButton.textContent = waitingCaption;
   }
 
   setEventListeners() {

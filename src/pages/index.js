@@ -29,7 +29,8 @@ import {
   avatarPopup,
   updateAvatarButton,
   avatarForm,
-  avatarUrlField
+  avatarUrlField,
+  waitCaption
 } from '../utils/constants.js';
 import { PopupConfirm } from '../components/PopupConfirm';
 
@@ -73,6 +74,8 @@ const handleProfileEditSubmit = () => {
     about: subtitleField.value
   }
 
+  newEditPopup.setWaitCaption(waitCaption);
+
   api.updateUserInfo(updatedInfo.name, updatedInfo.about)
     .then(updatedInfo => {
       userInfo.setUserInfo(updatedInfo);
@@ -95,6 +98,7 @@ const toggleEditPopup = () => {
   titleField.value = currentUserInfo.name;
   subtitleField.value = currentUserInfo.about;
 
+  newEditPopup.resetWaitCaption();
   editPopupValidator.resetAllErrors();
   
   newEditPopup.open();
@@ -108,6 +112,8 @@ const handleCardAddSubmit = () => {
     name: newPlaceField.value,
     link: newLinkField.value,
   }
+
+  newAddPopup.setWaitCaption(waitCaption);
 
   api.sendNewCard(cardObj.link, cardObj.name)
     .then(item => {
@@ -148,6 +154,7 @@ const newAddPopup = new PopupWithForm({
 // вызов окна добавления карточки
 const toggleAddPopup = () => {
   addForm.reset();
+  newAddPopup.resetWaitCaption();
   addPopupValidator.resetAllErrors();
   newAddPopup.open();
 }
@@ -169,6 +176,7 @@ const handleDeleteConfirmation = (evt, cardElement) => {
 // обработчик отправки формы обновления аватара
 const handleAvatarUpdate = () => {
   const newAvatarUrl = avatarUrlField.value;
+  newAvatarPopup.setWaitCaption(waitCaption);
   api.updateAvatar(newAvatarUrl)
     .then(userData => {
       currentAvatar.src = userData.avatar;
@@ -187,6 +195,7 @@ const newAvatarPopup = new PopupWithForm({
 
 const toggleEditAvatarPopup = () => {
   avatarForm.reset();
+  newAvatarPopup.resetWaitCaption();
   avatarPopupValidator.resetAllErrors();  
   newAvatarPopup.open();
 }

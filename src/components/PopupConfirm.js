@@ -1,4 +1,5 @@
 import { Popup } from './Popup.js';
+import { waitCaption } from '../utils/constants.js';
 
 export class PopupConfirm extends Popup {
   constructor({ popupElement, submitHandler }) {
@@ -6,11 +7,19 @@ export class PopupConfirm extends Popup {
     this._submitHandler = submitHandler;
   }
 
+  resetWaitCaption() {
+    this._submitButton.textContent = 'Сохранить';
+  }
+
+  setWaitCaption(waitingCaption) {
+    this._submitButton.textContent = waitingCaption;
+  }
+
   setEventListeners() {
     super.setEventListeners();
     
     this._form = this._popupElement.querySelector('.popup__form');
-    this._form.addEventListener('submit', evt => {
+    this._form.addEventListener('submit', evt => {      
       this._submitHandler(evt, this._element);
     });
   }
