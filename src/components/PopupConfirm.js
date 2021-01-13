@@ -6,14 +6,6 @@ export class PopupConfirm extends Popup {
     this._submitHandler = submitHandler;
   }
 
-  resetWaitCaption() {
-    this._submitButton.textContent = 'Сохранить';
-  }
-
-  setWaitCaption(waitingCaption) {
-    this._submitButton.textContent = waitingCaption;
-  }
-
   setEventListeners() {
     super.setEventListeners();
     

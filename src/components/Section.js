@@ -5,8 +5,8 @@ export class Section {
     this._container = document.querySelector(containerSelector);
   }
 
-  addItem(item) {
-    this._container.append(item);
+  addItem(item, isArray) {
+    isArray ? this._container.append(item) : this._container.prepend(item);
   }
 
   renderItems() {

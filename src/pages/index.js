@@ -22,7 +22,6 @@ import {
   viewerPopup,
   currentProfileTitle,
   currentProfileSubtitle,
-  contentSection,
   currentAvatar,
   deletePopup,
   currentUserId,
@@ -30,9 +29,21 @@ import {
   updateAvatarButton,
   avatarForm,
   avatarUrlField,
-  waitCaption
+  waitCaption,
+  submitCaption
 } from '../utils/constants.js';
 import { PopupConfirm } from '../components/PopupConfirm';
+
+// ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+
+// переменная будет принимать экземпляр класса Section
+let section = {};
+
+// переключатель раскладки карточек
+// используется в классе Section для выбор метода добавления карточек в секцию
+// при true карточки раскладываются методом .append(), для правильной расстановки массива карточек с сервера
+// при false новые карточки добавляются в начало секции
+let renderSwitch = true;
 
 // ИНИЦИАЛИЗАЦИЯ API
 
@@ -44,20 +55,12 @@ const api = new Api({
   }
 });
 
-// ПОЛУЧЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ С СЕРВЕРА
-
-api.getUserData()
-  .then(userData => {
-    currentAvatar.src = userData.avatar;
-    currentProfileTitle.textContent = userData.name;
-    currentProfileSubtitle.textContent = userData.about;  
-  });
-
 // создание экземпляра информации о пользователе
 
 const userInfo = new UserInfo({
   titleElement: currentProfileTitle,
-  subtitleElement: currentProfileSubtitle
+  subtitleElement: currentProfileSubtitle,
+  avatarElement: currentAvatar
 });
 
 // СОЗДАНИЕ ЭКЗЕМПЛЯРОВ МОДАЛЬНЫХ ОКОН
@@ -74,14 +77,14 @@ const handleProfileEditSubmit = () => {
     about: subtitleField.value
   }
 
-  newEditPopup.setWaitCaption(waitCaption);
+  newEditPopup.renderLoading(waitCaption);
 
   api.updateUserInfo(updatedInfo.name, updatedInfo.about)
     .then(updatedInfo => {
       userInfo.setUserInfo(updatedInfo);
-    });
-
-  newEditPopup.close();
+      newEditPopup.close();
+    })
+    .catch(err => api.handleError(err));
 }
 
 // создание экземпляра формы обновления профиля
@@ -98,7 +101,7 @@ const toggleEditPopup = () => {
   titleField.value = currentUserInfo.name;
   subtitleField.value = currentUserInfo.about;
 
-  newEditPopup.resetWaitCaption();
+  newEditPopup.renderLoading(submitCaption);
   editPopupValidator.resetAllErrors();
   
   newEditPopup.open();
@@ -113,34 +116,14 @@ const handleCardAddSubmit = () => {
     link: newLinkField.value,
   }
 
-  newAddPopup.setWaitCaption(waitCaption);
+  newAddPopup.renderLoading(waitCaption);
 
   api.sendNewCard(cardObj.link, cardObj.name)
     .then(item => {
-      const card = new Card({
-        cardData: item,
-        handleCardClick: () => {
-          imagePopup.open(item.link, item.name);
-        },
-        handleCardDelete: () => {
-          newDeletePopup.open(card);
-        },
-        handleCardLike: () => {
-          const cardId = item._id;
-          const toggleLike = card.likedByUser() ? api.removeLike(cardId) : api.setLike(cardId);
-
-          toggleLike.then(item => {
-            card.updateLikeCount(item.likes);
-          })
-        },
-        userId: currentUserId
-      },
-      '.card-template');
-
-      contentSection.prepend(card.generateCard());
-    });
-
-  newAddPopup.close();
+      cardRenderer(item);
+      newAddPopup.close();
+    })
+    .catch(err => api.handleError(err));
 }
 
 // создание экземпляра формы добавления карточки
@@ -154,7 +137,7 @@ const newAddPopup = new PopupWithForm({
 // вызов окна добавления карточки
 const toggleAddPopup = () => {
   addForm.reset();
-  newAddPopup.resetWaitCaption();
+  newAddPopup.renderLoading(submitCaption);
   addPopupValidator.resetAllErrors();
   newAddPopup.open();
 }
@@ -167,11 +150,10 @@ const handleDeleteConfirmation = (evt, cardElement) => {
 
   api.deleteCard(cardElement.getCardId())
     .then(() => {
-      cardElement.deleteCard();  
-    })
-    .finally(() => {
+      cardElement.deleteCard();
       newDeletePopup.close();
     })
+    .catch(err => api.handleError(err))
 }
 
 // 5. Окно обновления аватара
@@ -180,17 +162,15 @@ const handleAvatarUpdate = () => {
   // взять введенное значение
   const newAvatarUrl = avatarUrlField.value;
   // установить надпись ожидания на кнопке
-  newAvatarPopup.setWaitCaption(waitCaption);
+  newAvatarPopup.renderLoading(waitCaption);
   // отправить данные на сервер
   api.updateAvatar(newAvatarUrl)
     .then(userData => {
       currentAvatar.src = userData.avatar;
-    })
-    .finally(() => {
       newAvatarPopup.close();
-    });
+    })
+    .catch(err => api.handleError(err))
 }
-
 
 // создание экземпляра окна обновления аватара
 const newAvatarPopup = new PopupWithForm({
@@ -202,7 +182,7 @@ const newAvatarPopup = new PopupWithForm({
 
 const toggleEditAvatarPopup = () => {
   avatarForm.reset();
-  newAvatarPopup.resetWaitCaption();
+  newAvatarPopup.renderLoading(submitCaption);
   avatarPopupValidator.resetAllErrors();  
   newAvatarPopup.open();
 }
@@ -214,44 +194,33 @@ const newDeletePopup = new PopupConfirm({
   submitHandler: handleDeleteConfirmation
 });
 
-// ПРОГРУЗИТЬ НАЧАЛЬНЫЕ КАРТОЧКИ
-// 1. получаем карточки с сервера
-api.getInitialCards()
-  .then(serverCards => {
-    renderInitialCards(serverCards);    
-  });
+// функция отрисовки карточки
 
-// 2. отрисовываем их
+const cardRenderer = item => {
+  {
+    const card = new Card({
+      cardData: item,
+      handleCardClick: () => {
+        imagePopup.open(item.link, item.name);
+      },
+      handleCardDelete: () => {
+        newDeletePopup.open(card);
+      },
+      handleCardLike: () => {
+        const cardId = item._id;
+        const toggleLike = card.likedByUser() ? api.removeLike(cardId) : api.setLike(cardId);
 
-const renderInitialCards = serverCards => {
-  const section = new Section(
-    {
-      items: serverCards,
-      renderer: item => {
-        const card = new Card({
-          cardData: item,
-          handleCardClick: () => {
-            imagePopup.open(item.link, item.name);
-          },
-          handleCardDelete: () => {
-            newDeletePopup.open(card);
-          },
-          handleCardLike: () => {
-            const cardId = item._id;
-            const toggleLike = card.likedByUser() ? api.removeLike(cardId) : api.setLike(cardId);
-
-            toggleLike.then(item => {
-              card.updateLikeCount(item.likes);
-            })
-          },
-          userId: currentUserId
-        },
-        '.card-template');
-        section.addItem(card.generateCard());
-      }
+        toggleLike.then(item => {
+          card.updateLikeCount(item.likes);
+        })
+        .catch(err => api.handleError(err))
+      },
+      userId: currentUserId
     },
-    '.content');
-    section.renderItems();
+    '.card-template');
+
+    section.addItem(card.generateCard(), renderSwitch);
+  }
 }
 
 // ДОБАВЛЕНИЕ СЛУШАТЕЛЕЙ СОБЫТИЙ
@@ -282,5 +251,32 @@ addPopupValidator.enableValidation();
 
 const avatarPopupValidator = new FormValidator(config, avatarForm);
 avatarPopupValidator.enableValidation();
+
+// ЗАГРУЗКА ДАННЫХ СТРАНИЦЫ
+
+Promise.all([
+  api.getUserData(),
+  api.getInitialCards()
+])    
+.then(values => {
+  const [userData, initialCards] = values;
+  // обработка ответа getUserData
+  userInfo.setUserInfo(userData);
+
+  // обработка ответа getInitialCards
+  section = new Section(
+    {
+      items: initialCards,
+      renderer: cardRenderer
+    },
+    '.content');
+    section.renderItems();
+
+    // переключить переключатель, т.к. в дальнейшем будут добавляться только новые карточки
+    renderSwitch = false;
+})
+.catch(err => {
+  api.handleError(err);
+})
 
 export { addForm, editForm }

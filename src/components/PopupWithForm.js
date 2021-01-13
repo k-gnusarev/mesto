@@ -19,12 +19,8 @@ export class PopupWithForm extends Popup {
     return this._formValues;
   }
 
-  resetWaitCaption() {
-    this._submitButton.textContent = 'Сохранить';
-  }
-
-  setWaitCaption(waitingCaption) {
-    this._submitButton.textContent = waitingCaption;
+  renderLoading(caption) {
+    this._submitButton.textContent = caption;
   }
 
   setEventListeners() {

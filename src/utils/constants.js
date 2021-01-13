@@ -40,9 +40,9 @@ const currentProfileSubtitle = document.querySelector('.profile__subtitle');
 const currentAvatar = document.querySelector('.profile__avatar');
 
 // прочие глобальные ссылки
-const contentSection = document.querySelector('.content');
 const currentUserId = '82c3226c62f91c52d5321c73';
 const waitCaption = 'Сохранение...';
+const submitCaption = 'Сохранить';
 
 export {
   config,
@@ -60,7 +60,6 @@ export {
   popupPhoto,
   currentProfileTitle,
   currentProfileSubtitle,
-  contentSection,
   currentAvatar,
   deletePopup,
   currentUserId,
@@ -68,5 +67,6 @@ export {
   updateAvatarButton,
   avatarForm,
   avatarUrlField,
-  waitCaption
+  waitCaption,
+  submitCaption
 }

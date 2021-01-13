@@ -84,6 +84,7 @@ export class Card {
 
   deleteCard() {
     this._cardElement.remove();
+    this._cardElement = null;
   }
 
   updateLikeCount(updatedLikes) {
